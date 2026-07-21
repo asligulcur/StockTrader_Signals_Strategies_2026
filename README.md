@@ -60,6 +60,8 @@ Each per-ticker file carries `strategy_a`, `strategy_b`, `strategy_c` (decision,
 
 From the committed run (2026-04-12), across the six tickers: Momentum vs. Contrarian **agreed on 2, disagreed on 4**, and **all three agents agreed exactly once** (GME, a unanimous HOLD). The structure of the disagreement is the point:
 
+![Decision matrix — six stocks (rows) by three strategy agents (columns), each cell colored by BUY/HOLD/SELL with the agent's confidence beneath, and a right-hand column labeling each row's agreement pattern (three-way split, 2–1, or unanimous). Momentum vs Contrarian agree on 2 and split on 4; all three agree only on GME.](report/decision_matrix.png)
+
 | Ticker | Momentum | Contrarian | Vol. Averse | Pattern |
 |--------|----------|------------|-------------|---------|
 | NVDA | BUY | HOLD | SELL | all three distinct |
