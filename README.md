@@ -69,7 +69,7 @@ From the committed run (2026-04-12), across the six tickers: Momentum vs. Contra
 | GME | HOLD | HOLD | HOLD | unanimous |
 | JPM | HOLD | SELL | HOLD | two-one |
 
-The finding worth surfacing: **RSI is the mechanical fulcrum of nearly every Momentum-vs-Contrarian split.** The same reading is read through opposite lenses — on INTC an RSI of 80.35 is "overbought exhaustion" to the Momentum agent and "peak euphoria to sell" to the Contrarian; on TSLA an RSI of ~42 is "sustained selling pressure" versus "approaching an oversold opportunity." Disagreement isn't random; it traces to one indicator both agents hold but interpret inversely — exactly the attribution the architecture was built to expose. Full justifications and the Evaluator's per-ticker analysis are in `outputs/`, with the extended write-up in `report/report-3.pdf`.
+The finding worth surfacing: **RSI is the mechanical fulcrum of nearly every Momentum-vs-Contrarian split.** The same reading is read through opposite lenses — on INTC an RSI of 80.35 is "overbought exhaustion" to the Momentum agent and "peak euphoria to sell" to the Contrarian; on TSLA an RSI of ~42 is "sustained selling pressure" versus "approaching an oversold opportunity." Disagreement isn't random; it traces to one indicator both agents hold but interpret inversely — exactly the attribution the architecture was built to expose. Full justifications and the Evaluator's per-ticker analysis are in `outputs/`, with the extended write-up in `report/report.pdf`.
 
 ## Key design decisions
 
@@ -99,7 +99,7 @@ The finding worth surfacing: **RSI is the mechanical fulcrum of nearly every Mom
 | `prompts/` | System prompts — philosophy, ranked priorities, ignore lists (`strategy_a/b/c.txt`, `evaluator.txt`) |
 | `outputs/` | Committed run: per-ticker JSON + `summary.json` |
 | `Agent and Multi-Agent System Canvases/` | Specification, architecture, and per-agent design canvases (HTML) |
-| `report/` | Comparative analysis write-up (`report-3.pdf`) and the architecture diagram |
+| `report/` | Comparative analysis write-up (`report.pdf`) and the architecture diagram |
 
 ## Author
 
