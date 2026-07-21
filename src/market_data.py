@@ -129,7 +129,7 @@ def get_market_data(ticker: str) -> dict:
     if math.isnan(volatility_90d):
         volatility_90d = 0.0
 
-    # Average True Range (14) — for Volatility Averse strategy (assignment menu)
+    # Average True Range (14) — for the Volatility Averse strategy
     high = hist["High"].astype(float)
     low = hist["Low"].astype(float)
     prev_close = close.shift(1)

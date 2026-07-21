@@ -48,7 +48,7 @@ Respond with ONLY a JSON object in this exact format, no other text:
 
 
 def format_volatility_averse_user_prompt(market_data: dict) -> str:
-    """User prompt emphasizing ATR and volatility metrics (assignment Strategy Menu: Volatility Averse)."""
+    """User prompt emphasizing ATR and volatility metrics (Volatility Averse)."""
     d = market_data
     return f"""Analyze the following stock data for {d['ticker']} as a Volatility Averse investor and provide your recommendation.
 
@@ -127,7 +127,7 @@ def run_value_contrarian(market_data: dict) -> dict:
 
 
 def run_volatility_averse(market_data: dict) -> dict:
-    """Returns strategy C output — Volatility Averse (bonus: third strategy from course menu)."""
+    """Returns strategy C output — Volatility Averse (third strategy)."""
     system = load_prompt("strategy_c.txt")
     user = format_volatility_averse_user_prompt(market_data)
     raw = call_llm(system, user, response_kind="strategy")

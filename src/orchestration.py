@@ -161,8 +161,6 @@ def generate_summary(results: list[dict]) -> dict:
         )
 
     summary = {
-        "bonus_implementation": "third_strategy_agent",
-        "third_strategy": "Volatility Averse",
         "strategies": [
             "Momentum Trader",
             "Value Contrarian",

@@ -144,9 +144,9 @@
   <div class="header">
     <div class="header-bar">
       <h1>Multi-Agent Architecture Canvas</h1>
-      <span class="course">94815 · Agentic Technologies · L6</span>
+      <span class="course">StockTrader</span>
     </div>
-    <div class="subtitle">StockTrader — Architecture: Market Data → Momentum Trader ∥ Value Contrarian ∥ Volatility Averse (bonus third strategy) → Evaluator (three-way synthesis), using Anthropic Claude Sonnet (`claude-sonnet-4-6`) with plain Python asyncio orchestration</div>
+    <div class="subtitle">StockTrader — Architecture: Market Data → Momentum Trader ∥ Value Contrarian ∥ Volatility Averse → Evaluator (three-way synthesis), using Anthropic Claude Sonnet (`claude-sonnet-4-6`) with plain Python asyncio orchestration</div>
   </div>
 
   <div class="container canvas">
@@ -168,7 +168,7 @@
           <div class="field-rows">
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Per Agent</span>
-              <span class="field-row-text"><strong>Market Data Component:</strong> no LLM — deterministic Python computation. <strong>Momentum Trader:</strong> Anthropic Claude Sonnet (`claude-sonnet-4-6`, Messages API), temperature 0.3. <strong>Value Contrarian:</strong> same model, same temperature, different system prompt. <strong>Volatility Averse (bonus):</strong> same model; dedicated user prompt foregrounding ATR, σ(returns), worst 1-day drop. <strong>Evaluator:</strong> same model, three-way comparative synthesis prompt. All four LLM calls per stock use identical model configurations; behavioral divergence comes entirely from prompt design.</span>
+              <span class="field-row-text"><strong>Market Data Component:</strong> no LLM — deterministic Python computation. <strong>Momentum Trader:</strong> Anthropic Claude Sonnet (`claude-sonnet-4-6`, Messages API), temperature 0.3. <strong>Value Contrarian:</strong> same model, same temperature, different system prompt. <strong>Volatility Averse:</strong> same model; dedicated user prompt foregrounding ATR, σ(returns), worst 1-day drop. <strong>Evaluator:</strong> same model, three-way comparative synthesis prompt. All four LLM calls per stock use identical model configurations; behavioral divergence comes entirely from prompt design.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Homogeneous</span>
@@ -176,7 +176,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Profiling</span>
-              <span class="field-row-text">Pre-defined system prompts (prompts/strategy_a.txt, strategy_b.txt, strategy_c.txt, evaluator.txt). Each strategy prompt encodes: behavioral philosophy, explicit decision framework with BUY/HOLD/SELL criteria, ranked data priority hierarchy, an explicit ignore list, a personality bias, and a strict output schema. Prompts are loaded at call time from disk. The bonus third agent uses strategy_c.txt.</span>
+              <span class="field-row-text">Pre-defined system prompts (prompts/strategy_a.txt, strategy_b.txt, strategy_c.txt, evaluator.txt). Each strategy prompt encodes: behavioral philosophy, explicit decision framework with BUY/HOLD/SELL criteria, ranked data priority hierarchy, an explicit ignore list, a personality bias, and a strict output schema. Prompts are loaded at call time from disk. The third agent uses strategy_c.txt.</span>
             </div>
           </div>
         </div>
@@ -398,7 +398,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Drift</span>
-              <span class="field-row-text">Behavioral drift is detected post-hoc by the student reviewing JSON outputs for: (1) personality leakage — a Momentum Trader citing contrarian reasoning, (2) justification-data disconnect — reasoning that doesn't reference the specific numbers provided, (3) schema drift — responses that deviate from the required JSON structure (caught by the 3-layer parser). No automated drift detection during execution.</span>
+              <span class="field-row-text">Behavioral drift is detected post-hoc by the analyst reviewing JSON outputs for: (1) personality leakage — a Momentum Trader citing contrarian reasoning, (2) justification-data disconnect — reasoning that doesn't reference the specific numbers provided, (3) schema drift — responses that deviate from the required JSON structure (caught by the 3-layer parser). No automated drift detection during execution.</span>
             </div>
           </div>
         </div>
@@ -414,7 +414,7 @@
           <div class="field-rows">
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Evidence</span>
-              <span class="field-row-text">Agent justifications are verifiable against the market_data_summary saved in the same JSON file. A grader can check whether the specific numbers cited in a justification (e.g., "RSI of 72") match the computed indicators. The prompts require agents to reference ≥3 data points, making verification tractable. No automated verification is implemented — this is a human review step.</span>
+              <span class="field-row-text">Agent justifications are verifiable against the market_data_summary saved in the same JSON file. A reviewer can check whether the specific numbers cited in a justification (e.g., "RSI of 72") match the computed indicators. The prompts require agents to reference ≥3 data points, making verification tractable. No automated verification is implemented — this is a human review step.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Separation</span>
@@ -422,7 +422,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Contradiction</span>
-              <span class="field-row-text"><strong>Present both — no resolution.</strong> Contradictory recommendations are preserved side-by-side in the JSON output. The Evaluator explains the contradiction but does not resolve it. This is the correct architectural choice for this system: the assignment grades the quality of the disagreement analysis, not the correctness of a final recommendation. Forcing consensus would destroy the system's value.</span>
+              <span class="field-row-text"><strong>Present both — no resolution.</strong> Contradictory recommendations are preserved side-by-side in the JSON output. The Evaluator explains the contradiction but does not resolve it. This is the correct architectural choice for this system: the goal is the quality of the disagreement analysis, not the correctness of a final recommendation. Forcing consensus would destroy the system's value.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Gaps</span>
@@ -447,15 +447,15 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Fit metrics</span>
-              <span class="field-row-text">No quantitative fit metrics apply — the system does not predict prices and is not measured on financial accuracy. Quality is measured qualitatively: (1) do justifications reference ≥3 real data points? (2) does the strategy pair produce ≥1 agreement and ≥1 disagreement across the stock set (6 tickers)? (3) does the Evaluator explain behavioral logic rather than restating decisions? These are grading rubric criteria, not automated metrics.</span>
+              <span class="field-row-text">No quantitative fit metrics apply — the system does not predict prices and is not measured on financial accuracy. Quality is measured qualitatively: (1) do justifications reference ≥3 real data points? (2) does the strategy pair produce ≥1 agreement and ≥1 disagreement across the stock set (6 tickers)? (3) does the Evaluator explain behavioral logic rather than restating decisions? These are quality criteria, not automated metrics.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Frequency</span>
-              <span class="field-row-text">No periodic recalibration — this is a one-shot batch system. "Calibration" is prompt tuning by the student between runs: run the system, inspect outputs, adjust system prompts in the text files, re-run. The prompt-loading-from-disk design enables this without code changes. A typical development cycle involves 3–5 calibration runs before final output generation.</span>
+              <span class="field-row-text">No periodic recalibration — this is a one-shot batch system. "Calibration" is prompt tuning by the analyst between runs: run the system, inspect outputs, adjust system prompts in the text files, re-run. The prompt-loading-from-disk design enables this without code changes. A typical development cycle involves 3–5 calibration runs before final output generation.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Benchmarks</span>
-              <span class="field-row-text">No external model benchmark. The required pair (Momentum vs Contrarian) cross-check each other; the bonus third agent (Volatility Averse) adds a path-risk lens. If outputs collapse to identical reasoning, prompt design needs work. The comparative report is the validation artifact.</span>
+              <span class="field-row-text">No external model benchmark. The Momentum vs Contrarian pair cross-check each other; the third agent (Volatility Averse) adds a path-risk lens. If outputs collapse to identical reasoning, prompt design needs work. The comparative report is the validation artifact.</span>
             </div>
           </div>
         </div>
@@ -487,7 +487,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Feedback</span>
-              <span class="field-row-text">No intra-run feedback loops. The only feedback path is human-in-the-loop between runs: student inspects JSON outputs → identifies weak prompts or generic reasoning → edits prompt text files → re-runs. This is a manual calibration loop, not an automated feedback architecture. The prompt-on-disk design explicitly supports this workflow.</span>
+              <span class="field-row-text">No intra-run feedback loops. The only feedback path is human-in-the-loop between runs: analyst inspects JSON outputs → identifies weak prompts or generic reasoning → edits prompt text files → re-runs. This is a manual calibration loop, not an automated feedback architecture. The prompt-on-disk design explicitly supports this workflow.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Lifecycle</span>
@@ -533,11 +533,11 @@
           <div class="field-rows">
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Priority 1</span>
-              <span class="field-row-text"><strong>Behavioral clarity over financial accuracy.</strong> The system prioritizes clearly differentiated agent behaviors over producing "correct" investment advice. A system where agents disagree for well-articulated reasons is more successful than one where both agents happen to be right but produce identical reasoning. This is the assignment's core trade-off and the architecture is designed around it.</span>
+              <span class="field-row-text"><strong>Behavioral clarity over financial accuracy.</strong> The system prioritizes clearly differentiated agent behaviors over producing "correct" investment advice. A system where agents disagree for well-articulated reasons is more successful than one where both agents happen to be right but produce identical reasoning. This is the system's core trade-off and the architecture is designed around it.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Priority 2</span>
-              <span class="field-row-text"><strong>Simplicity and debuggability over sophistication.</strong> Plain Python over LangChain. Single-shot prompts over ReAct loops. Function calls over agent frameworks. Sequential stock processing over full parallelism. Every architectural decision favors the simplest approach that satisfies requirements. This minimizes debugging surface area and makes the system transparent to graders.</span>
+              <span class="field-row-text"><strong>Simplicity and debuggability over sophistication.</strong> Plain Python over LangChain. Single-shot prompts over ReAct loops. Function calls over agent frameworks. Sequential stock processing over full parallelism. Every architectural decision favors the simplest approach that satisfies requirements. This minimizes debugging surface area and makes the system transparent to reviewers.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Accept</span>
@@ -556,7 +556,7 @@
 
   <div class="container footer">
     <span class="footer-left">Architecture choices follow from the multi-agent specification — structure and behavior drive implementation</span>
-    <span class="footer-right">Carnegie Mellon University · Heinz College</span>
+    <span class="footer-right">StockTrader</span>
   </div>
   <div class="container" style="text-align:center; margin-top:10px; padding-top:6px; border-top:1px solid #e0e0e0;">
     <span style="font-size:9px; color:#888; font-style:italic;">Canvas framework by Prof. Anand S. Rao</span>

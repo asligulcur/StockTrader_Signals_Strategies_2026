@@ -18,7 +18,7 @@ The payoff is a structured record where the *fact* of agreement (deterministic) 
 
 A parallel fan-out pipeline: deterministic data in, three isolated agents, a neutral evaluator, structured JSON out.
 
-![StockTrader system architecture — parallel fan-out with a convergence barrier: a non-LLM market-data component feeds one shared dict to three isolated strategy agents, whose outputs meet at a programmatic agreement check and a neutral evaluator before being written to per-ticker JSON plus a summary.](report/System%20Diagram/stocktrader_architecture-2.png)
+![StockTrader system architecture — parallel fan-out with a convergence barrier: a non-LLM market-data component feeds one shared dict to three isolated strategy agents, whose outputs meet at a programmatic agreement check and a neutral evaluator before being written to per-ticker JSON plus a summary.](report/System%20Diagram/stocktrader_architecture.png)
 
 - **Phase 1 — Data (no LLM).** `src/market_data.py` pulls ~1 year of OHLCV from yfinance and computes every indicator in Python: 20/50-day moving averages, 14-day RSI, 30-day and 90-day volatility (std of daily returns), 14-day ATR and ATR as a percent of price, worst single-day drop over 90 days, max drawdown, 52-week positioning, and volume trend. Zero model calls, so every number the agents reason over is reproducible.
 - **Phase 2 — Analysis (parallel, isolated).** The three strategy agents receive the same dict and run concurrently via `asyncio.gather`. All use Claude Sonnet (`claude-sonnet-4-6`) at temperature 0.3. No agent sees another's output.

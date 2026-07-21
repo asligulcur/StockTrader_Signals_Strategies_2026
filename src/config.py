@@ -1,6 +1,6 @@
 """Configuration: tickers, model, and constants."""
 
-# Bonus: third strategy agent — Volatility Averse (course Strategy Menu); see prompts/strategy_c.txt
+# Third strategy agent — Volatility Averse; see prompts/strategy_c.txt
 TICKERS = ["NVDA", "TSLA", "JNJ", "INTC", "GME", "JPM"]
 
 # Stock selection rationale (include as comments):

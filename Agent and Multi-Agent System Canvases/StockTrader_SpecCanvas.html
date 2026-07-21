@@ -169,7 +169,7 @@
   <div class="header">
     <div class="header-bar">
       <h1>Multi-Agent System Specification Canvas</h1>
-      <span class="course">94815 · Agentic Technologies · L6</span>
+      <span class="course">StockTrader</span>
     </div>
     <div class="subtitle">StockTrader — Two competing LLM-powered strategy agents (Momentum Trader &amp; Value Contrarian) independently analyze real stock data via yfinance, produce BUY / HOLD / SELL recommendations, and an Evaluator agent synthesizes agreement or disagreement.</div>
   </div>
@@ -191,7 +191,7 @@
             <span class="field-icon">🎯</span>
             <span class="field-title prominent field-title-1">System Mission</span>
           </div>
-          <div class="field-text">Given a stock ticker, fetch real market data and produce independent investment recommendations from opposed philosophies — then explain agreement and disagreement. The <strong>required</strong> core is two behaviorally distinct strategies (trend-following vs. mean-reversion) plus a neutral evaluator. The implementation adds a <strong>bonus third strategy</strong> — Volatility Averse (path risk / ATR / σ) — running in parallel on the same data, so the evaluator performs <strong>three-way</strong> synthesis (unanimous, 2–1, or three distinct). The end user is the student-analyst reviewing JSON and the comparative report.</div>
+          <div class="field-text">Given a stock ticker, fetch real market data and produce independent investment recommendations from opposed philosophies — then explain agreement and disagreement. The core is two behaviorally distinct strategies (trend-following vs. mean-reversion) plus a neutral evaluator. The implementation adds a <strong>third strategy</strong> — Volatility Averse (path risk / ATR / σ) — running in parallel on the same data, so the evaluator performs <strong>three-way</strong> synthesis (unanimous, 2–1, or three distinct). The end user is an analyst reviewing JSON and the comparative report.</div>
         </div>
       </div>
 
@@ -205,11 +205,11 @@
           <div class="field-rows">
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Agents</span>
-              <span class="field-row-text"><strong>Market Data Component</strong> (non-LLM) — yfinance + indicators (incl. ATR, 30d/90d σ). <strong>Momentum Trader</strong> — trend-following. <strong>Value Contrarian</strong> — mean-reversion. <strong>Volatility Averse</strong> (bonus) — turbulence / path risk. <strong>Evaluator</strong> — compares <strong>three</strong> recommendations and explains three-way patterns; also records Momentum–Contrarian agreement.</span>
+              <span class="field-row-text"><strong>Market Data Component</strong> (non-LLM) — yfinance + indicators (incl. ATR, 30d/90d σ). <strong>Momentum Trader</strong> — trend-following. <strong>Value Contrarian</strong> — mean-reversion. <strong>Volatility Averse</strong> — turbulence / path risk. <strong>Evaluator</strong> — compares <strong>three</strong> recommendations and explains three-way patterns; also records Momentum–Contrarian agreement.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Profiling</span>
-              <span class="field-row-text">System prompts: strategy_a.txt, strategy_b.txt, strategy_c.txt (bonus), evaluator.txt. Each encodes decision framework, data priorities, and ignore lists.</span>
+              <span class="field-row-text">System prompts: strategy_a.txt, strategy_b.txt, strategy_c.txt, evaluator.txt. Each encodes decision framework, data priorities, and ignore lists.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Justify</span>
@@ -231,7 +231,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Why MA</span>
-              <span class="field-row-text">The assignment's intellectual core — structured disagreement from identical data — requires at minimum two agents with incompatible philosophies plus a neutral arbiter. A single agent prompted to "consider both perspectives" would hedge and blend rather than commit to opposing positions. Separation enforces genuine behavioral independence.</span>
+              <span class="field-row-text">The system's intellectual core — structured disagreement from identical data — requires at minimum two agents with incompatible philosophies plus a neutral arbiter. A single agent prompted to "consider both perspectives" would hedge and blend rather than commit to opposing positions. Separation enforces genuine behavioral independence.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-1">Out scope</span>
@@ -401,7 +401,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Gated</span>
-              <span class="field-row-text">No real-time human checkpoints during execution. Human review occurs post-run: the student inspects JSON outputs, verifies justifications reference real data, and identifies weak results for the required "failure or surprise" documentation in the report.</span>
+              <span class="field-row-text">No real-time human checkpoints during execution. Human review occurs post-run: the analyst inspects JSON outputs, verifies justifications reference real data, and identifies weak results for the required "failure or surprise" documentation in the report.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Denied</span>
@@ -422,7 +422,7 @@
           <div class="field-rows">
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Reinforcing</span>
-              <span class="field-row-text">None by design within a single run. The single-pass architecture prevents reinforcing loops — no agent output feeds back into any agent's input. However, across iterations (if the student re-runs with tuned prompts), a reinforcing loop exists: observed convergence → prompt differentiation → greater divergence → richer analysis → further prompt refinement.</span>
+              <span class="field-row-text">None by design within a single run. The single-pass architecture prevents reinforcing loops — no agent output feeds back into any agent's input. However, across iterations (if the operator re-runs with tuned prompts), a reinforcing loop exists: observed convergence → prompt differentiation → greater divergence → richer analysis → further prompt refinement.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-3">Balancing</span>
@@ -496,7 +496,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Escalate</span>
-              <span class="field-row-text">No automated escalation. All escalation is post-hoc human review: the student examines JSON outputs for generic justifications, data-free reasoning, universal agreement, or internally inconsistent recommendations. Weak results are documented in the required "failure or surprise" section of the report.</span>
+              <span class="field-row-text">No automated escalation. All escalation is post-hoc human review: the analyst examines JSON outputs for generic justifications, data-free reasoning, universal agreement, or internally inconsistent recommendations. Weak results are documented in the required "failure or surprise" section of the report.</span>
             </div>
           </div>
         </div>
@@ -517,7 +517,7 @@
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Scenarios</span>
-              <span class="field-row-text">Six stocks are deliberately chosen to represent distinct market scenarios: strong uptrend (NVDA), high volatility (TSLA), stable/sideways (JNJ), significant decline (INTC), meme/retail volatility (GME), and large bank / rate–credit cycle (JPM). This selection is designed to surface at least one agreement and one sharp disagreement. The student selects scenarios; the system does not generate them.</span>
+              <span class="field-row-text">Six stocks are deliberately chosen to represent distinct market scenarios: strong uptrend (NVDA), high volatility (TSLA), stable/sideways (JNJ), significant decline (INTC), meme/retail volatility (GME), and large bank / rate–credit cycle (JPM). This selection is designed to surface at least one agreement and one sharp disagreement. The operator selects scenarios; the system does not generate them.</span>
             </div>
             <div class="field-row">
               <span class="field-row-label field-row-label-4">Communication</span>
@@ -564,7 +564,7 @@
 
   <div class="container footer">
     <span class="footer-left">Define structure and behavior before choosing multi-agent architecture</span>
-    <span class="footer-right">Carnegie Mellon University · Heinz College</span>
+    <span class="footer-right">StockTrader</span>
   </div>
   <div class="container" style="text-align:center; margin-top:10px; padding-top:6px; border-top:1px solid #e0e0e0;">
     <span style="font-size:9px; color:#888; font-style:italic;">Canvas framework by Prof. Anand S. Rao</span>
