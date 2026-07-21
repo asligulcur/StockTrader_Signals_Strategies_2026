@@ -1,0 +1,50 @@
+{
+  "ticker": "JNJ",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 238.46,
+    "price_30d_ago": 243.47,
+    "pct_change_30d": -2.0577,
+    "avg_daily_volume_20d": 7468210,
+    "volatility_30d": 0.9844,
+    "volatility_90d": 1.0479,
+    "atr_14": 4.2214,
+    "atr_pct_of_price": 1.7703,
+    "moving_avg_20d": 239.896,
+    "moving_avg_50d": 240.2364,
+    "rsi_14": 56.8576,
+    "52_week_high": 248.56,
+    "52_week_low": 142.3927,
+    "pct_from_52w_high": -4.0634,
+    "pct_from_52w_low": 67.4665,
+    "volume_trend": "decreasing",
+    "pct_change_90d": 15.8553,
+    "max_drawdown_90d": -5.3468,
+    "recent_drawdown_5d": -1.8845,
+    "max_single_day_drop_90d": -2.3115
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "HOLD",
+    "confidence": 4,
+    "justification": "JNJ is trading at $238.46, sitting just below both the 20-day MA ($239.896) and 50-day MA ($240.2364), which is a red flag for a momentum trader — the price needs to reclaim these levels to confirm an uptrend. The 30-day price change is -2.06% and the recent 5-day change is -1.88%, signaling short-term downward pressure that contradicts the strong 90-day gain of +15.86%. Volume is decreasing and negative days (16) outnumber positive days (14) over the last 30 sessions, meaning there's no volume confirmation of a reversal. RSI at 56.86 is neutral and not a concern, but without price reclaiming the moving averages, I'm not pulling the trigger on a buy — I'll wait for a clearer breakout signal."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "HOLD",
+    "confidence": 7,
+    "justification": "JNJ is only 4.06% below its 52-week high, which is far from the 20-30% drawdown threshold that would trigger a contrarian buy signal. The RSI of 56.86 sits comfortably in the neutral zone between 40 and 60, indicating neither overbought nor oversold conditions. The max drawdown over 90 days is a modest -5.35%, and the stock has actually surged 15.86% from its 90-day price — suggesting this is not a fear-driven capitulation but rather a stock near the top of its recent range. There is no compelling contrarian entry here, and chasing a stock this close to its 52-week high goes against my core discipline of buying fear, not complacency."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "BUY",
+    "confidence": 7,
+    "justification": "JNJ's 30-day volatility of 0.9844% and 90-day volatility of 1.0479% are both modest, indicating a calm and orderly tape that suits a volatility-averse posture. The ATR as a percentage of price sits at just 1.7703%, confirming that daily swings are contained relative to the stock's price level. The worst single-day drop over the last 90 trading days was only -2.3115%, and the max drawdown of -5.3468% reflects a shallow stress path — neither figure signals dangerous tail risk. Taken together, these metrics paint a picture of a controlled, low-turbulence name that meets the criteria for adding exposure. The recent minor price softness is not a volatility concern and does not override the fundamentally smooth ride this stock has offered."
+  },
+  "evaluator": {
+    "agents_agree": true,
+    "agents_all_agree": false,
+    "analysis": "Momentum and Contrarian both land on HOLD, but for entirely different reasons rooted in their respective frameworks. The Momentum Trader sees JNJ trading below both its 20-day MA ($239.896) and 50-day MA ($240.2364), with 16 negative days outnumbering 14 positive days over 30 sessions and a -2.06% 30-day decline — insufficient trend confirmation to act despite the strong 90-day gain of +15.86%. The Value Contrarian also holds, but because the stock is only 4.06% below its 52-week high and RSI sits at a neutral 56.86 — far from the fear-driven capitulation or 20-30% drawdown that would justify a contrarian entry. The Volatility Averse strategy diverges with a BUY, anchoring entirely on the smoothness of the price path: 30-day volatility of 0.9844%, ATR at just 1.7703% of price, and a worst single-day drop of only -2.3115% over 90 days all signal a low-turbulence environment that meets its threshold for adding exposure. Where Momentum sees a lack of upward confirmation and Contrarian sees a lack of downside dislocation, Volatility Averse interprets the same mild softness as a non-threatening, orderly pullback within a calm tape. The outlier's logic is path-focused rather than directional — it does not require trend strength or fear pricing, only the absence of dangerous volatility. This divergence illustrates how the same data point — modest recent price decline — is read as a warning flag by one lens, an irrelevant non-event by another, and a non-concern by the third."
+  },
+  "three_way_pattern": "two_one"
+}

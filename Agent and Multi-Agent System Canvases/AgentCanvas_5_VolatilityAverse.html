@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Canvas — Volatility Averse</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    background: #F7F8FA;
+    padding: 20px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1060px; margin: 0 auto; }
+  .header { margin-bottom: 16px; }
+  .header-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid #990000; padding-bottom: 8px;
+  }
+  .header-bar h1 {
+    font: 700 24px/1.2 Georgia, 'Palatino Linotype', serif;
+    color: #1a1a2e; letter-spacing: -0.3px;
+  }
+  .header-bar .course { font: 600 10px Georgia, serif; color: #990000; }
+  .subtitle {
+    font-size: 11px; color: #5a5a6a; line-height: 1.5;
+    margin-top: 6px; font-style: italic;
+  }
+  .bonus-tag {
+    display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 700;
+    color: #fff; background: #1565C0; padding: 2px 10px; border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .canvas { position: relative; }
+  .flow-indicator {
+    position: absolute; left: -18px; top: 20px; bottom: 20px;
+    width: 4px; border-radius: 2px;
+    background: linear-gradient(to bottom, #1565C0 0%, #1565C0 35%, #0D6B5E 40%, #5E35B1 80%, #5E35B1 100%);
+    opacity: 0.25;
+  }
+  .zone {
+    border-radius: 10px; padding: 10px 14px 14px; position: relative;
+    margin-bottom: 12px;
+  }
+  .zone:last-child { margin-bottom: 0; }
+  .zone-1 { background: #E8EAF6; border: 1px solid #C5CAE9; }
+  .zone-2 {
+    background: #EBF7F4; border: 2px solid #8ECFC4;
+    padding: 12px 16px 16px;
+    box-shadow: 0 2px 16px rgba(13,107,94,0.08);
+  }
+  .zone-3 { background: #F3EEFC; border: 1px solid #C5B3E6; }
+  .zone-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 10px; padding: 3px 12px 3px 8px;
+    border-radius: 4px;
+  }
+  .zone-badge-1 { background: #C5CAE9; border: 1px solid #9FA8DA; }
+  .zone-badge-2 { background: #B2E0D6; border: 1px solid #8ECFC4; }
+  .zone-badge-3 { background: #DDD0F0; border: 1px solid #C5B3E6; }
+  .zone-num {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 10px Georgia, serif; color: #fff;
+  }
+  .zone-num-1 { background: #3949AB; }
+  .zone-num-2 { background: #0D6B5E; }
+  .zone-num-3 { background: #5E35B1; }
+  .zone-label {
+    font: 700 9px Georgia, serif; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .zone-label-1 { color: #3949AB; }
+  .zone-label-2 { color: #0D6B5E; }
+  .zone-label-3 { color: #5E35B1; }
+  .row { display: grid; gap: 10px; margin-bottom: 10px; }
+  .row:last-child { margin-bottom: 0; }
+  .row-full { grid-template-columns: 1fr; }
+  .row-half { grid-template-columns: 1fr 1fr; }
+  .field {
+    background: #FFFFFF; border-radius: 6px;
+    padding: 10px 14px; position: relative;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .field-z1 { border-left: 3.5px solid #3949AB; }
+  .field-z2 { border-left: 3.5px solid #0D6B5E; }
+  .field-z3 { border-left: 3.5px solid #5E35B1; }
+  .field.bookend-1 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #E8EAF6 100%);
+    border-color: rgba(57,73,171,0.25);
+  }
+  .field.bookend-3 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3EEFC 100%);
+    border-color: rgba(94,53,177,0.25);
+  }
+  .field-num {
+    position: absolute; top: 8px; right: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 9px Georgia, serif;
+  }
+  .field-num-1 { background: #C5CAE9; border: 1px solid #9FA8DA; color: #3949AB; }
+  .field-num-2 { background: #B2E0D6; border: 1px solid #8ECFC4; color: #0D6B5E; }
+  .field-num-3 { background: #DDD0F0; border: 1px solid #C5B3E6; color: #5E35B1; }
+  .field-header {
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 7px; padding-right: 28px;
+  }
+  .field-icon { font-size: 15px; line-height: 1; }
+  .field-title { font: 700 12px Georgia, serif; }
+  .field-title.prominent { font-size: 13.5px; }
+  .field-title-1 { color: #3949AB; }
+  .field-title-2 { color: #0D6B5E; }
+  .field-title-3 { color: #5E35B1; }
+  .field-text { font-size: 11px; line-height: 1.6; color: #3a3a4a; }
+  .field-rows { display: flex; flex-direction: column; gap: 2px; }
+  .field-row { display: flex; gap: 6px; font-size: 10.5px; line-height: 1.5; }
+  .field-row-label {
+    font-weight: 700; min-width: 76px; flex-shrink: 0;
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.3px;
+    padding-top: 1px;
+  }
+  .field-row-label-1 { color: #3949AB; }
+  .field-row-label-2 { color: #0D6B5E; }
+  .field-row-label-3 { color: #5E35B1; }
+  .field-row-text { color: #3a3a4a; }
+  .watermark {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-2deg);
+    font: 700 14px Georgia, serif;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: rgba(21,101,192,0.07);
+    pointer-events: none; white-space: nowrap;
+  }
+  .footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #ddd; padding-top: 8px; margin-top: 14px;
+  }
+  .footer-left { font-size: 9.5px; color: #999; font-style: italic; }
+  .footer-right { font-size: 9px; color: #bbb; }
+  @media print {
+    body { padding: 10px; }
+    .flow-indicator { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-bar">
+      <h1>Agent System Specification Canvas</h1>
+      <span class="course">94815 · Agentic Technologies · L4</span>
+    </div>
+    <div class="subtitle">StockTrader — Volatility Averse (strategy_c). Course Strategy Menu item + bonus “third strategy agent.” Runs in parallel with Momentum and Value Contrarian on the same market data dict; uses a dedicated user prompt that foregrounds ATR, σ(returns), and tail risk.</div>
+    <div class="bonus-tag">BONUS · THIRD STRATEGY</div>
+  </div>
+
+  <div class="container canvas">
+    <div class="flow-indicator"></div>
+    <div class="zone zone-1">
+      <div class="zone-badge zone-badge-1">
+        <span class="zone-num zone-num-1">1</span>
+        <span class="zone-label zone-label-1">System Intent</span>
+      </div>
+      <div class="row row-full"><div class="field field-z1 bookend-1">
+        <div class="field-num field-num-1">1</div>
+        <div class="field-header">
+          <span class="field-icon">🎯</span>
+          <span class="field-title prominent field-title-1">Use Case / Purpose</span>
+        </div>
+        <div class="field-text">Analyze the same stock data through a <strong>path-risk</strong> lens — “survive first, profit second; avoid turbulence.” This agent cares whether the ride is orderly (low realized volatility, contained ATR, shallow worst-day drops), not whether the crowd is greedy or fearful. It is the bonus <strong>third</strong> strategy in the implementation: it completes the assignment’s two-way comparison for grading, but adds three-way agreement patterns (unanimous, 2–1, or three distinct decisions) for the optional bonus.</div>
+      </div></div>
+      <div class="row row-half"><div class="field field-z1">
+        <div class="field-num field-num-1">2</div>
+        <div class="field-header">
+          <span class="field-icon">✂️</span>
+          <span class="field-title field-title-1">Task Slice / Goal</span>
+        </div>
+        <div class="field-text">Receive the volatility-focused user prompt (same underlying dict as other strategies). Output JSON: BUY/HOLD/SELL, confidence 1–10, 3–5 sentence justification citing ≥3 specific numbers, prioritizing <strong>volatility_30d</strong>, <strong>volatility_90d</strong>, <strong>atr_14</strong> / <strong>atr_pct_of_price</strong>, <strong>max_single_day_drop_90d</strong>, and drawdown — not MA trend or 52-week “story” as primary drivers.</div>
+      </div><div class="field field-z1">
+        <div class="field-num field-num-1">3</div>
+        <div class="field-header">
+          <span class="field-icon">👥</span>
+          <span class="field-title field-title-1">Users / Stakeholders</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Consumer</span>
+            <span class="field-row-text">Evaluator — receives strategy_c alongside strategy_a and strategy_b for three-way synthesis</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Peers</span>
+            <span class="field-row-text">Momentum &amp; Value Contrarian — same inputs, never see this agent’s output</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Reviewer</span>
+            <span class="field-row-text">Student analyst — checks §8 bonus note and <code>three_way_pattern</code> in JSON</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="zone zone-2">
+      <div class="zone-badge zone-badge-2">
+        <span class="zone-num zone-num-2">2</span>
+        <span class="zone-label zone-label-2">Bounded Behavior</span>
+      </div>
+      <div class="row row-half"><div class="field field-z2">
+        <div class="field-num field-num-2">4</div>
+        <div class="field-header">
+          <span class="field-icon">⇄</span>
+          <span class="field-title field-title-2">Inputs / Outputs</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">IN</span>
+            <span class="field-row-text">System prompt from <code>prompts/strategy_c.txt</code> + <code>format_volatility_averse_user_prompt()</code> (volatility metrics first; MAs/52w as secondary context only)</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">OUT</span>
+            <span class="field-row-text">JSON: {"name": "Volatility Averse", "decision", "confidence", "justification"} → merged as <code>strategy_c</code> in outputs/{TICKER}.json</span>
+          </div>
+        </div>
+      </div><div class="field field-z2">
+        <div class="field-num field-num-2">5</div>
+        <div class="field-header">
+          <span class="field-icon">🔧</span>
+          <span class="field-title field-title-2">Tools / Permissions</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">ALLOW</span>
+            <span class="field-row-text">Anthropic Messages API — one inference call (claude-sonnet-4-6, temperature 0.3)</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">DENY</span>
+            <span class="field-row-text">yfinance, other agents’ outputs, tools, web search</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="row row-half"><div class="field field-z2">
+        <div class="field-num field-num-2">6</div>
+        <div class="field-header">
+          <span class="field-icon">🛡️</span>
+          <span class="field-title field-title-2">Autonomy / Human Checkpoints</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Autonomous</span>
+            <span class="field-row-text">Single-shot recommendation from structured data; no human in the loop</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Gated</span>
+            <span class="field-row-text">Post-hoc: verify citations use vol/ATR/drop fields, not only RSI</span>
+          </div>
+        </div>
+      </div><div class="field field-z2">
+        <div class="field-num field-num-2">7</div>
+        <div class="field-header">
+          <span class="field-icon">📜</span>
+          <span class="field-title field-title-2">Operating Rules / Policies</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">HARD</span>
+            <span class="field-row-text">≥3 numeric cites from vol path metrics. JSON only. No access to strategy_a/b.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">SOFT</span>
+            <span class="field-row-text">Bias toward HOLD when σ and ATR sit in a middle band; SELL when turbulence is extreme; BUY when tape is calm and contained</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Persona</span>
+            <span class="field-row-text">Risk-averse, process-first; allergic to whipsaws</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="watermark">Bounded Agentic System</div>
+    </div>
+
+    <div class="zone zone-3">
+      <div class="zone-badge zone-badge-3">
+        <span class="zone-num zone-num-3">3</span>
+        <span class="zone-label zone-label-3">Context & Evaluation</span>
+      </div>
+      <div class="row row-half"><div class="field field-z3">
+        <div class="field-num field-num-3">8</div>
+        <div class="field-header">
+          <span class="field-icon">💾</span>
+          <span class="field-title field-title-3">Memory / Context</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Session</span>
+            <span class="field-row-text">System + one user message; single-turn</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Persist</span>
+            <span class="field-row-text">None — stateless per ticker</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Limit</span>
+            <span class="field-row-text">Similar token budget to other strategy agents (~1.5k in / ~400 out)</span>
+          </div>
+        </div>
+      </div><div class="field field-z3">
+        <div class="field-num field-num-3">9</div>
+        <div class="field-header">
+          <span class="field-icon">⚠️</span>
+          <span class="field-title field-title-3">Failure Conditions</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Bad JSON</span>
+            <span class="field-row-text">Same retry + parse fallback as strategy_a/b</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Leak</span>
+            <span class="field-row-text">Agent argues only from 52-week distance without σ/ATR → prompt compliance issue</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="row row-full"><div class="field field-z3 bookend-3">
+        <div class="field-num field-num-3">10</div>
+        <div class="field-header">
+          <span class="field-icon">✅</span>
+          <span class="field-title prominent field-title-3">Success Criteria</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Schema</span>
+            <span class="field-row-text">Valid JSON with name, decision, confidence, justification</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Ground</span>
+            <span class="field-row-text">Justification anchored in volatility_30d, volatility_90d, atr_14 or atr_pct_of_price, max_single_day_drop_90d (≥3)</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Bonus</span>
+            <span class="field-row-text">Enables non-redundant three-way splits (e.g. NVDA BUY/HOLD/SELL) documented in report §8</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="container footer">
+    <span class="footer-left">Volatility Averse — course Strategy Menu · optional bonus third agent</span>
+    <span class="footer-right">Carnegie Mellon University · Heinz College</span>
+  </div>
+</div>
+
+</body>
+</html>

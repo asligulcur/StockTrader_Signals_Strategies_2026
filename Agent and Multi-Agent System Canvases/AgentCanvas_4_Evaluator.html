@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Canvas — Evaluator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    background: #F7F8FA;
+    padding: 20px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1060px; margin: 0 auto; }
+  .header { margin-bottom: 16px; }
+  .header-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid #990000; padding-bottom: 8px;
+  }
+  .header-bar h1 {
+    font: 700 24px/1.2 Georgia, 'Palatino Linotype', serif;
+    color: #1a1a2e; letter-spacing: -0.3px;
+  }
+  .header-bar .course { font: 600 10px Georgia, serif; color: #990000; }
+  .subtitle {
+    font-size: 11px; color: #5a5a6a; line-height: 1.5;
+    margin-top: 6px; font-style: italic;
+  }
+  .canvas { position: relative; }
+  .flow-indicator {
+    position: absolute; left: -18px; top: 20px; bottom: 20px;
+    width: 4px; border-radius: 2px;
+    background: linear-gradient(to bottom, #2B579A 0%, #2B579A 28%, #0D6B5E 35%, #0D6B5E 65%, #5E35B1 72%, #5E35B1 100%);
+    opacity: 0.25;
+  }
+  .zone {
+    border-radius: 10px; padding: 10px 14px 14px; position: relative;
+    margin-bottom: 12px;
+  }
+  .zone:last-child { margin-bottom: 0; }
+  .zone-1 { background: #F0F4FA; border: 1px solid #B8CCE4; }
+  .zone-2 {
+    background: #EBF7F4; border: 2px solid #8ECFC4;
+    padding: 12px 16px 16px;
+    box-shadow: 0 2px 16px rgba(13,107,94,0.08);
+  }
+  .zone-3 { background: #F3EEFC; border: 1px solid #C5B3E6; }
+  .zone-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 10px; padding: 3px 12px 3px 8px;
+    border-radius: 4px;
+  }
+  .zone-badge-1 { background: #D6E4F5; border: 1px solid #B8CCE4; }
+  .zone-badge-2 { background: #B2E0D6; border: 1px solid #8ECFC4; }
+  .zone-badge-3 { background: #DDD0F0; border: 1px solid #C5B3E6; }
+  .zone-num {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 10px Georgia, serif; color: #fff;
+  }
+  .zone-num-1 { background: #2B579A; }
+  .zone-num-2 { background: #0D6B5E; }
+  .zone-num-3 { background: #5E35B1; }
+  .zone-label {
+    font: 700 9px Georgia, serif; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .zone-label-1 { color: #2B579A; }
+  .zone-label-2 { color: #0D6B5E; }
+  .zone-label-3 { color: #5E35B1; }
+  .row { display: grid; gap: 10px; margin-bottom: 10px; }
+  .row:last-child { margin-bottom: 0; }
+  .row-full { grid-template-columns: 1fr; }
+  .row-half { grid-template-columns: 1fr 1fr; }
+  .field {
+    background: #FFFFFF; border-radius: 6px;
+    padding: 10px 14px; position: relative;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .field-z1 { border-left: 3.5px solid #2B579A; }
+  .field-z2 { border-left: 3.5px solid #0D6B5E; }
+  .field-z3 { border-left: 3.5px solid #5E35B1; }
+  .field.bookend-1 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FA 100%);
+    border-color: rgba(43,87,154,0.25);
+  }
+  .field.bookend-3 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3EEFC 100%);
+    border-color: rgba(94,53,177,0.25);
+  }
+  .field-num {
+    position: absolute; top: 8px; right: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 9px Georgia, serif;
+  }
+  .field-num-1 { background: #D6E4F5; border: 1px solid #B8CCE4; color: #2B579A; }
+  .field-num-2 { background: #B2E0D6; border: 1px solid #8ECFC4; color: #0D6B5E; }
+  .field-num-3 { background: #DDD0F0; border: 1px solid #C5B3E6; color: #5E35B1; }
+  .field-header {
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 7px; padding-right: 28px;
+  }
+  .field-icon { font-size: 15px; line-height: 1; }
+  .field-title { font: 700 12px Georgia, serif; }
+  .field-title.prominent { font-size: 13.5px; }
+  .field-title-1 { color: #2B579A; }
+  .field-title-2 { color: #0D6B5E; }
+  .field-title-3 { color: #5E35B1; }
+  .field-text { font-size: 11px; line-height: 1.6; color: #3a3a4a; }
+  .field-rows { display: flex; flex-direction: column; gap: 2px; }
+  .field-row { display: flex; gap: 6px; font-size: 10.5px; line-height: 1.5; }
+  .field-row-label {
+    font-weight: 700; min-width: 76px; flex-shrink: 0;
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.3px;
+    padding-top: 1px;
+  }
+  .field-row-label-1 { color: #2B579A; }
+  .field-row-label-2 { color: #0D6B5E; }
+  .field-row-label-3 { color: #5E35B1; }
+  .field-row-text { color: #3a3a4a; }
+  .watermark {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-2deg);
+    font: 700 14px Georgia, serif;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: rgba(13,107,94,0.07);
+    pointer-events: none; white-space: nowrap;
+  }
+  .footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #ddd; padding-top: 8px; margin-top: 14px;
+  }
+  .footer-left { font-size: 9.5px; color: #999; font-style: italic; }
+  .footer-right { font-size: 9px; color: #bbb; }
+  @media print {
+    body { padding: 10px; }
+    .flow-indicator { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-bar">
+      <h1>Agent System Specification Canvas</h1>
+      <span class="course">94815 · Agentic Technologies · L4</span>
+    </div>
+    <div class="subtitle">StockTrader — Evaluator: neutral three-way synthesis (Momentum vs Value Contrarian vs Volatility Averse) + Momentum–Contrarian agreement flags</div>
+  </div>
+
+  <div class="container canvas">
+    <div class="flow-indicator"></div>
+    <div class="zone zone-1">
+      <div class="zone-badge zone-badge-1">
+        <span class="zone-num zone-num-1">1</span>
+        <span class="zone-label zone-label-1">System Intent</span>
+      </div>
+      <div class="row row-full"><div class="field field-z1 bookend-1">
+        <div class="field-num field-num-1">1</div>
+        <div class="field-header">
+          <span class="field-icon">🎯</span>
+          <span class="field-title prominent field-title-1">Use Case / Purpose</span>
+        </div>
+        <div class="field-text">Compare <strong>three</strong> strategy recommendations (implementation) and explain behavioral logic behind unanimous, 2–1, or three-way splits. The required assignment pair (Momentum vs Contrarian) remains central; <code>agents_agree</code> still reflects that pair. <code>agents_all_agree</code> indicates whether all three decisions match. The evaluator has no opinion on the stock — it explains how philosophies weight the same numbers differently.</div>
+      </div></div>
+      <div class="row row-half"><div class="field field-z1">
+        <div class="field-num field-num-1">2</div>
+        <div class="field-header">
+          <span class="field-icon">✂️</span>
+          <span class="field-title field-title-1">Task Slice / Goal</span>
+        </div>
+        <div class="field-text">Receive strategy_a, strategy_b, strategy_c plus market summary (incl. volatility fields). Synthesize three-way patterns: all agree, two vs one, or three distinct. Do not crown a winner. Reference specific numbers from outputs and market data.</div>
+      </div><div class="field field-z1">
+        <div class="field-num field-num-1">3</div>
+        <div class="field-header">
+          <span class="field-icon">👥</span>
+          <span class="field-title field-title-1">Users / Stakeholders</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Consumer</span>
+            <span class="field-row-text">JSON output file — the evaluator section is the final analytical layer saved to outputs/{TICKER}.json</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Upstream A</span>
+            <span class="field-row-text">Momentum Trader — provides strategy_a output (decision, confidence, justification) as input evidence</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Upstream B</span>
+            <span class="field-row-text">Value Contrarian — strategy_b</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Upstream C</span>
+            <span class="field-row-text">Volatility Averse (bonus) — strategy_c</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-1">Reviewer</span>
+            <span class="field-row-text">Student analyst — uses evaluator analysis as raw material for the comparative report's "Patterns" section</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="zone zone-2">
+      <div class="zone-badge zone-badge-2">
+        <span class="zone-num zone-num-2">2</span>
+        <span class="zone-label zone-label-2">Bounded Behavior</span>
+      </div>
+      <div class="row row-half"><div class="field field-z2">
+        <div class="field-num field-num-2">4</div>
+        <div class="field-header">
+          <span class="field-icon">⇄</span>
+          <span class="field-title field-title-2">Inputs / Outputs</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">IN</span>
+            <span class="field-row-text">prompts/evaluator.txt + user prompt: market summary + full strategy_a, strategy_b, strategy_c outputs + precomputed agree/disagree flags</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">OUT</span>
+            <span class="field-row-text">JSON: {"agents_agree": bool, "agents_all_agree": bool, "analysis": "5–8 sentences, three-way synthesis"}</span>
+          </div>
+        </div>
+      </div><div class="field field-z2">
+        <div class="field-num field-num-2">5</div>
+        <div class="field-header">
+          <span class="field-icon">🔧</span>
+          <span class="field-title field-title-2">Tools / Permissions</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">ALLOW</span>
+            <span class="field-row-text">Anthropic Messages API — one inference call (claude-sonnet-4-6, temperature 0.3, single-shot completion)</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">DENY</span>
+            <span class="field-row-text">yfinance (no independent data access), web search, filesystem, strategy agents' system prompts, any tool use within the LLM call, any ability to modify strategy outputs</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="row row-half"><div class="field field-z2">
+        <div class="field-num field-num-2">6</div>
+        <div class="field-header">
+          <span class="field-icon">🛡️</span>
+          <span class="field-title field-title-2">Autonomy / Human Checkpoints</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Autonomous</span>
+            <span class="field-row-text">Full comparative analysis — receives both outputs, produces synthesis, returns JSON. No human intervention during execution.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Gated</span>
+            <span class="field-row-text">Post-hoc review: student checks that analysis explains <em>why</em> strategies diverged (behavioral logic) rather than merely <em>that</em> they diverged (restating decisions).</span>
+          </div>
+        </div>
+      </div><div class="field field-z2">
+        <div class="field-num field-num-2">7</div>
+        <div class="field-header">
+          <span class="field-icon">📜</span>
+          <span class="field-title field-title-2">Operating Rules / Policies</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">HARD</span>
+            <span class="field-row-text">Never declare a winner among strategies. Never produce its own BUY/HOLD/SELL. Never compare confidence as a debate score. Must respond with JSON only.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">SOFT</span>
+            <span class="field-row-text">Reference specific numbers from all three justifications and market data. Explain 2–1 or three-way splits without ranking strategies.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-2">Persona</span>
+            <span class="field-row-text">Neutral analyst, not an investor. Treats both strategies as legitimate frameworks. Values explanatory depth over judgment. No investment bias in any direction.</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="watermark">Bounded Agentic System</div>
+    </div>
+
+    <div class="zone zone-3">
+      <div class="zone-badge zone-badge-3">
+        <span class="zone-num zone-num-3">3</span>
+        <span class="zone-label zone-label-3">Context & Evaluation</span>
+      </div>
+      <div class="row row-half"><div class="field field-z3">
+        <div class="field-num field-num-3">8</div>
+        <div class="field-header">
+          <span class="field-icon">💾</span>
+          <span class="field-title field-title-3">Memory / Context</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Session</span>
+            <span class="field-row-text">System prompt + one user message with market data + three strategy outputs. Single-turn.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Persist</span>
+            <span class="field-row-text">None — each stock evaluation is independent. No memory of how strategies performed on prior tickers.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Limit</span>
+            <span class="field-row-text">~2,500+ tokens input (system + market data + three strategy outputs), ~600–900 tokens output. Largest input of all agents.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Privacy</span>
+            <span class="field-row-text">Sees all three strategy outputs but not their system prompts.</span>
+          </div>
+        </div>
+      </div><div class="field field-z3">
+        <div class="field-num field-num-3">9</div>
+        <div class="field-header">
+          <span class="field-icon">⚠️</span>
+          <span class="field-title field-title-3">Failure Conditions / Escalations</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Bad JSON</span>
+            <span class="field-row-text">LLM returns non-JSON text → 3-layer parsing fallback. Retry up to 3× with 1s backoff.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Restatement</span>
+            <span class="field-row-text">Analysis merely restates decisions ("one said buy, one said sell") → detected post-hoc by student. Indicates evaluator prompt needs more explicit instructions.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Winner pick</span>
+            <span class="field-row-text">Evaluator declares one strategy "correct" or "better" → violates neutrality constraint. Detected post-hoc. Prompt must reinforce no-winner rule.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Error input</span>
+            <span class="field-row-text">If any strategy returns ERROR, note it in analysis rather than fabricating a three-way comparison.</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">API failure</span>
+            <span class="field-row-text">Anthropic API timeout → retry up to 3×. After exhaustion, return placeholder analysis noting failure.</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="row row-full"><div class="field field-z3 bookend-3">
+        <div class="field-num field-num-3">10</div>
+        <div class="field-header">
+          <span class="field-icon">✅</span>
+          <span class="field-title prominent field-title-3">Success Criteria</span>
+        </div>
+        <div class="field-rows">
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Schema</span>
+            <span class="field-row-text">Valid JSON: agents_agree, agents_all_agree, analysis (5–8 sentences)</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Explanatory</span>
+            <span class="field-row-text">Analysis explains the behavioral logic behind agreement/disagreement — identifies which data points each strategy weighted and how interpretations differed</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Neutrality</span>
+            <span class="field-row-text">Does not declare a winner, does not produce its own recommendation, does not favor either strategy's philosophy</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Data-linked</span>
+            <span class="field-row-text">References specific numbers from market data and from all three justifications where applicable</span>
+          </div>
+          <div class="field-row">
+            <span class="field-row-label field-row-label-3">Non-trivial</span>
+            <span class="field-row-text">Goes beyond restating three decisions; explains splits (e.g. why the outlier disagrees).</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="container footer">
+    <span class="footer-left">Define intent, bounded behavior, and evaluation before choosing architecture</span>
+    <span class="footer-right">Carnegie Mellon University · Heinz College</span>
+  </div>
+</div>
+
+</body>
+</html>

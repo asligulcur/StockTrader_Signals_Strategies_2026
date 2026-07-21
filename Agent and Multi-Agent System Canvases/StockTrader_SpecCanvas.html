@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Agent System Specification Canvas — StockTrader</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    background: #F7F8FA;
+    padding: 20px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1060px; margin: 0 auto; }
+
+  .header { margin-bottom: 16px; }
+  .header-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid #990000; padding-bottom: 8px;
+  }
+  .header-bar h1 {
+    font: 700 22px/1.2 Georgia, 'Palatino Linotype', serif;
+    color: #1a1a2e; letter-spacing: -0.3px;
+  }
+  .header-bar .course {
+    font: 600 10px Georgia, serif; color: #990000;
+  }
+  .subtitle {
+    font-size: 11px; color: #5a5a6a; line-height: 1.5;
+    margin-top: 6px; font-style: italic;
+  }
+
+  .canvas { position: relative; }
+  .flow-indicator {
+    position: absolute; left: -18px; top: 20px; bottom: 20px;
+    width: 4px; border-radius: 2px;
+    background: linear-gradient(to bottom, #2B579A 0%, #2B579A 20%, #0D6B5E 26%, #0D6B5E 48%, #9B2335 54%, #9B2335 74%, #5E35B1 80%, #5E35B1 100%);
+    opacity: 0.25;
+  }
+
+  .zone {
+    border-radius: 10px; padding: 10px 14px 14px; position: relative;
+    margin-bottom: 12px;
+  }
+  .zone:last-child { margin-bottom: 0; }
+  .zone-1 { background: #F0F4FA; border: 1px solid #B8CCE4; }
+  .zone-2 {
+    background: #EBF7F4; border: 2px solid #8ECFC4;
+    padding: 12px 16px 16px;
+    box-shadow: 0 2px 16px rgba(13,107,94,0.08);
+  }
+  .zone-3 { background: #FDF2F3; border: 1px solid #E8B4B8; }
+  .zone-4 { background: #F3EEFC; border: 1px solid #C5B3E6; }
+
+  .zone-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 10px; padding: 3px 12px 3px 8px;
+    border-radius: 4px;
+  }
+  .zone-badge-1 { background: #D6E4F5; border: 1px solid #B8CCE4; }
+  .zone-badge-2 { background: #B2E0D6; border: 1px solid #8ECFC4; }
+  .zone-badge-3 { background: #F5D5D8; border: 1px solid #E8B4B8; }
+  .zone-badge-4 { background: #DDD0F0; border: 1px solid #C5B3E6; }
+  .zone-num {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 10px Georgia, serif; color: #fff;
+  }
+  .zone-num-1 { background: #2B579A; }
+  .zone-num-2 { background: #0D6B5E; }
+  .zone-num-3 { background: #9B2335; }
+  .zone-num-4 { background: #5E35B1; }
+  .zone-label {
+    font: 700 9px Georgia, serif; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .zone-label-1 { color: #2B579A; }
+  .zone-label-2 { color: #0D6B5E; }
+  .zone-label-3 { color: #9B2335; }
+  .zone-label-4 { color: #5E35B1; }
+
+  .row { display: grid; gap: 10px; margin-bottom: 10px; }
+  .row:last-child { margin-bottom: 0; }
+  .row-full { grid-template-columns: 1fr; }
+  .row-half { grid-template-columns: 1fr 1fr; }
+
+  .field {
+    background: #FFFFFF; border-radius: 6px;
+    padding: 10px 14px; position: relative;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .field-z1 { border-left: 3.5px solid #2B579A; }
+  .field-z2 { border-left: 3.5px solid #0D6B5E; }
+  .field-z3 { border-left: 3.5px solid #9B2335; }
+  .field-z4 { border-left: 3.5px solid #5E35B1; }
+  .field.bookend-1 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FA 100%);
+    border-color: rgba(43,87,154,0.25);
+  }
+  .field.bookend-4 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3EEFC 100%);
+    border-color: rgba(94,53,177,0.25);
+  }
+
+  .field-num {
+    position: absolute; top: 8px; right: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 9px Georgia, serif;
+  }
+  .field-num-1 { background: #D6E4F5; border: 1px solid #B8CCE4; color: #2B579A; }
+  .field-num-2 { background: #B2E0D6; border: 1px solid #8ECFC4; color: #0D6B5E; }
+  .field-num-3 { background: #F5D5D8; border: 1px solid #E8B4B8; color: #9B2335; }
+  .field-num-4 { background: #DDD0F0; border: 1px solid #C5B3E6; color: #5E35B1; }
+
+  .field-header {
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 7px; padding-right: 28px;
+  }
+  .field-icon { font-size: 15px; line-height: 1; }
+  .field-title { font: 700 12px Georgia, serif; }
+  .field-title.prominent { font-size: 13.5px; }
+  .field-title-1 { color: #2B579A; }
+  .field-title-2 { color: #0D6B5E; }
+  .field-title-3 { color: #9B2335; }
+  .field-title-4 { color: #5E35B1; }
+
+  .field-text { font-size: 11px; line-height: 1.6; color: #3a3a4a; }
+
+  .field-rows { display: flex; flex-direction: column; gap: 2px; }
+  .field-row { display: flex; gap: 6px; font-size: 10.5px; line-height: 1.5; }
+  .field-row-label {
+    font-weight: 700; min-width: 76px; flex-shrink: 0;
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.3px;
+    padding-top: 1px;
+  }
+  .field-row-label-1 { color: #2B579A; }
+  .field-row-label-2 { color: #0D6B5E; }
+  .field-row-label-3 { color: #9B2335; }
+  .field-row-label-4 { color: #5E35B1; }
+  .field-row-text { color: #3a3a4a; }
+
+  .watermark {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-2deg);
+    font: 700 14px Georgia, serif;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: rgba(13,107,94,0.07);
+    pointer-events: none; white-space: nowrap;
+  }
+
+  .footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #ddd; padding-top: 8px; margin-top: 14px;
+  }
+  .footer-left { font-size: 9.5px; color: #999; font-style: italic; }
+  .footer-right { font-size: 9px; color: #bbb; }
+
+  @media print {
+    body { padding: 10px; }
+    .flow-indicator { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-bar">
+      <h1>Multi-Agent System Specification Canvas</h1>
+      <span class="course">94815 · Agentic Technologies · L6</span>
+    </div>
+    <div class="subtitle">StockTrader — Two competing LLM-powered strategy agents (Momentum Trader &amp; Value Contrarian) independently analyze real stock data via yfinance, produce BUY / HOLD / SELL recommendations, and an Evaluator agent synthesizes agreement or disagreement.</div>
+  </div>
+
+  <div class="container canvas">
+    <div class="flow-indicator"></div>
+
+    <!-- ═══════ ZONE 1: SYSTEM INTENT ═══════ -->
+    <div class="zone zone-1">
+      <div class="zone-badge zone-badge-1">
+        <span class="zone-num zone-num-1">1</span>
+        <span class="zone-label zone-label-1">System Intent</span>
+      </div>
+
+      <div class="row row-full">
+        <div class="field field-z1 bookend-1">
+          <div class="field-num field-num-1">1</div>
+          <div class="field-header">
+            <span class="field-icon">🎯</span>
+            <span class="field-title prominent field-title-1">System Mission</span>
+          </div>
+          <div class="field-text">Given a stock ticker, fetch real market data and produce independent investment recommendations from opposed philosophies — then explain agreement and disagreement. The <strong>required</strong> core is two behaviorally distinct strategies (trend-following vs. mean-reversion) plus a neutral evaluator. The implementation adds a <strong>bonus third strategy</strong> — Volatility Averse (path risk / ATR / σ) — running in parallel on the same data, so the evaluator performs <strong>three-way</strong> synthesis (unanimous, 2–1, or three distinct). The end user is the student-analyst reviewing JSON and the comparative report.</div>
+        </div>
+      </div>
+
+      <div class="row row-half">
+        <div class="field field-z1">
+          <div class="field-num field-num-1">2</div>
+          <div class="field-header">
+            <span class="field-icon">👥</span>
+            <span class="field-title field-title-1">Agent Roster & Profiles</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">Agents</span>
+              <span class="field-row-text"><strong>Market Data Component</strong> (non-LLM) — yfinance + indicators (incl. ATR, 30d/90d σ). <strong>Momentum Trader</strong> — trend-following. <strong>Value Contrarian</strong> — mean-reversion. <strong>Volatility Averse</strong> (bonus) — turbulence / path risk. <strong>Evaluator</strong> — compares <strong>three</strong> recommendations and explains three-way patterns; also records Momentum–Contrarian agreement.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">Profiling</span>
+              <span class="field-row-text">System prompts: strategy_a.txt, strategy_b.txt, strategy_c.txt (bonus), evaluator.txt. Each encodes decision framework, data priorities, and ignore lists.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">Justify</span>
+              <span class="field-row-text">Strategy agents must be separate — no agent sees another's output before producing its own (orchestrator-enforced). The Evaluator is separate for neutrality. Market Data is non-LLM for reproducibility.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field field-z1">
+          <div class="field-num field-num-1">3</div>
+          <div class="field-header">
+            <span class="field-icon">🔲</span>
+            <span class="field-title field-title-1">System Scope & Boundaries</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">In scope</span>
+              <span class="field-row-text">Fetch 90+ days of historical price data for 6 stocks (NVDA, TSLA, JNJ, INTC, GME, JPM). Compute technical indicators (MAs, RSI, volatility, drawdown). Generate independent BUY/HOLD/SELL recommendations with confidence scores (1–10) and data-grounded justifications (3–5 sentences). Compare recommendations and produce evaluator analysis. Save structured JSON outputs per stock plus a cross-stock summary.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">Why MA</span>
+              <span class="field-row-text">The assignment's intellectual core — structured disagreement from identical data — requires at minimum two agents with incompatible philosophies plus a neutral arbiter. A single agent prompted to "consider both perspectives" would hedge and blend rather than commit to opposing positions. Separation enforces genuine behavioral independence.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-1">Out scope</span>
+              <span class="field-row-text">No live trading, no portfolio optimization, no backtesting engine, no real-time data streaming, no financial advice. The system does not predict whether a stock will actually go up or down. Grading is based on behavioral clarity and analytical depth, not financial accuracy.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ ZONE 2: MULTI-AGENT STRUCTURE ═══════ -->
+    <div class="zone zone-2">
+      <div class="zone-badge zone-badge-2">
+        <span class="zone-num zone-num-2">2</span>
+        <span class="zone-label zone-label-2">Multi-Agent Structure</span>
+      </div>
+
+      <div class="row row-full">
+        <div class="field field-z2">
+          <div class="field-num field-num-2">4</div>
+          <div class="field-header">
+            <span class="field-icon">🏗️</span>
+            <span class="field-title field-title-2">Social & Organizational Structure</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Hierarchy</span>
+              <span class="field-row-text">Flat pipeline with orchestrator (orchestration.py). Market Data feeds three strategy agents; all three feed the Evaluator. No agent manages another.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Teams</span>
+              <span class="field-row-text">Three parallel branches (implementation): Momentum, Value Contrarian, and Volatility Averse — independent analysts on the same input — parallel execution, no collaboration. Evaluator downstream synthesizes all three.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Authority</span>
+              <span class="field-row-text">No agent can override or modify another agent's output. The Evaluator reads both outputs as immutable evidence and produces its own analysis. The orchestrator controls execution order but has no authority over content. All outputs are append-only.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Trust</span>
+              <span class="field-row-text">Market Data is trusted (deterministic yfinance pipeline). Strategy agents are isolated. Evaluator treats strategy outputs as given inputs.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-half">
+        <div class="field field-z2">
+          <div class="field-num field-num-2">5</div>
+          <div class="field-header">
+            <span class="field-icon">📡</span>
+            <span class="field-title field-title-2">Communication Structure & Protocol</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Topology</span>
+              <span class="field-row-text">Hub-and-spoke. Orchestrator routes Market Data → three Strategy agents → Evaluator. No agent-to-agent messaging.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Messages</span>
+              <span class="field-row-text">Market Data → each strategy: same dict (Volatility Averse uses a volatility-emphasized user prompt). Strategies → Evaluator: three JSON blobs. All structured.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Pattern</span>
+              <span class="field-row-text">Single-pass pipeline — fetch → analyze (×3 parallel) → evaluate → save.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field field-z2">
+          <div class="field-num field-num-2">6</div>
+          <div class="field-header">
+            <span class="field-icon">🌐</span>
+            <span class="field-title field-title-2">Environment & Interface Structure</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Type</span>
+              <span class="field-row-text">Virtual environment: yfinance API (read-only financial data) + Anthropic Messages API (inference). No physical environment, no sandbox simulation, no database.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Shared</span>
+              <span class="field-row-text">The market data dictionary is shared identically across all three strategy agents. outputs/ persists JSON.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-2">Boundary</span>
+              <span class="field-row-text">External access is limited to two APIs: yfinance (data in) and Anthropic (inference). No web browsing, no file system writes outside outputs/, no network calls beyond these two endpoints. The system is read-only with respect to the external world — it produces recommendations but takes no action.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="watermark">Multi-Agent Structure</div>
+    </div>
+
+    <!-- ═══════ ZONE 3: BEHAVIOR & CONTROL ═══════ -->
+    <div class="zone zone-3">
+      <div class="zone-badge zone-badge-3">
+        <span class="zone-num zone-num-3">3</span>
+        <span class="zone-label zone-label-3">Multi-Agent Behavior & Control</span>
+      </div>
+
+      <div class="row row-half">
+        <div class="field field-z3">
+          <div class="field-num field-num-3">7</div>
+          <div class="field-header">
+            <span class="field-icon">🧩</span>
+            <span class="field-title field-title-3">Individual Behavior Specification</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Spatial</span>
+              <span class="field-row-text"><strong>Market Data:</strong> yfinance only. <strong>Each strategy agent:</strong> one Anthropic call, same data dict, different system prompt. <strong>Evaluator:</strong> one Anthropic call with three strategy outputs + market summary.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Temporal</span>
+              <span class="field-row-text">Per stock: Market Data → three strategies concurrently (asyncio.gather) → Evaluator. Stocks sequential with 2s delay.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Cognitive</span>
+              <span class="field-row-text"><strong>Market Data:</strong> deterministic rule-based computation (no reasoning). <strong>Strategy agents:</strong> single-shot prompted reasoning — each receives data + system prompt and produces a structured JSON response in one LLM call. No chain-of-thought, no tool use, no ReAct loops. <strong>Evaluator:</strong> same single-shot pattern, but with a comparative synthesis prompt.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field field-z3">
+          <div class="field-num field-num-3">8</div>
+          <div class="field-header">
+            <span class="field-icon">🔄</span>
+            <span class="field-title field-title-3">Collective & Social Behavior</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Planned</span>
+              <span class="field-row-text">Parallel analysis by three strategies (implementation), then neutral three-way synthesis. No dialogue between strategies.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Emergent</span>
+              <span class="field-row-text">Possible convergence drift: if prompts are insufficiently differentiated, both agents may produce similar hedged outputs despite different instructions. Possible justification-data disconnect: agents may generate plausible-sounding reasoning that doesn't actually reference the specific numbers provided. These are the primary failure modes to monitor in outputs.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Social</span>
+              <span class="field-row-text">Competitive framing: multiple philosophies on identical data. Evaluator synthesizes without choosing a winner.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-full">
+        <div class="field field-z3">
+          <div class="field-num field-num-3">9</div>
+          <div class="field-header">
+            <span class="field-icon">📜</span>
+            <span class="field-title field-title-3">Operating Rules, Norms & Human Checkpoints</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Norms</span>
+              <span class="field-row-text">All agent justifications must reference ≥3 specific data points from the market data. Decisions must be exactly one of BUY, HOLD, or SELL. Confidence must be an integer 1–10. Justifications must be 3–5 sentences. The Evaluator must never simply restate decisions — it must explain the behavioral logic behind divergence.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Rules</span>
+              <span class="field-row-text">LLM calls use temperature 0.3 for consistency. Maximum 3 retries per LLM call with 1-second backoff. 3-layer JSON parsing fallback (raw → code-block extraction → brace extraction). 2-second delay between stock analyses. All numpy types converted to native Python before JSON serialization.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Termination</span>
+              <span class="field-row-text">The system terminates after all 6 stocks are processed and summary.json is written. No iterative convergence — each stock is a single pass. If all retries fail for an LLM call, the system records an ERROR decision and continues to the next stock rather than halting.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Gated</span>
+              <span class="field-row-text">No real-time human checkpoints during execution. Human review occurs post-run: the student inspects JSON outputs, verifies justifications reference real data, and identifies weak results for the required "failure or surprise" documentation in the report.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Denied</span>
+              <span class="field-row-text">No agent may execute trades, access external APIs beyond yfinance and Anthropic, write files outside outputs/, modify another agent's completed output, or make more than one LLM call per invocation. The Market Data Component may never make LLM calls.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIELD 10: Cross-Domain Feedback Topology -->
+      <div class="row row-full">
+        <div class="field field-z3">
+          <div class="field-num field-num-3">10</div>
+          <div class="field-header">
+            <span class="field-icon">♻️</span>
+            <span class="field-title field-title-3">Cross-Domain Feedback Topology</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Reinforcing</span>
+              <span class="field-row-text">None by design within a single run. The single-pass architecture prevents reinforcing loops — no agent output feeds back into any agent's input. However, across iterations (if the student re-runs with tuned prompts), a reinforcing loop exists: observed convergence → prompt differentiation → greater divergence → richer analysis → further prompt refinement.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Balancing</span>
+              <span class="field-row-text">The Evaluator acts as the system's balancing mechanism. When strategy agents produce extreme or poorly justified recommendations, the Evaluator's analysis exposes weak reasoning — which signals the designer to adjust prompts. This is a human-in-the-loop balancing loop that operates between runs, not within a run.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Dominance</span>
+              <span class="field-row-text">In the current single-pass design, no feedback loop dominates because none operate intra-run. If the optional Debate Mode extension were implemented (agents respond to each other's reasoning in a second round), a reinforcing convergence loop would emerge where agents moderate toward each other, potentially collapsing designed disagreement.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-3">Cross-domain</span>
+              <span class="field-row-text">Market Data (quantitative domain) → Strategy agents (behavioral/interpretive domain) → Evaluator (meta-analytical domain). The critical cross-domain handoff is the formatting of numerical indicators into natural-language user prompts — this translation layer determines how much quantitative signal survives into the LLM's reasoning. Poorly formatted data leads to generic justifications regardless of prompt quality.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ ZONE 4: CONTEXT & EVALUATION ═══════ -->
+    <div class="zone zone-4">
+      <div class="zone-badge zone-badge-4">
+        <span class="zone-num zone-num-4">4</span>
+        <span class="zone-label zone-label-4">Context & Evaluation</span>
+      </div>
+
+      <div class="row row-half">
+        <div class="field field-z4">
+          <div class="field-num field-num-4">11</div>
+          <div class="field-header">
+            <span class="field-icon">💾</span>
+            <span class="field-title field-title-4">System I/O & Shared State</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">IN</span>
+              <span class="field-row-text">List of stock tickers (configured in config.py: NVDA, TSLA, JNJ, INTC, GME, JPM). ANTHROPIC_API_KEY environment variable. No user interaction at runtime — the system is fully batch-driven.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">OUT</span>
+              <span class="field-row-text">Per-stock JSON: market_data_summary, strategy_a/b/c, evaluator (agents_agree, agents_all_agree, analysis), three_way_pattern. summary.json includes total_agreements_ab, total_all_three_agree, etc.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Shared</span>
+              <span class="field-row-text">Market data dict computed once, passed identically to all three strategy agents. outputs/ written by orchestrator only.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Private</span>
+              <span class="field-row-text">Each strategy agent's system prompt is private to that agent — the other strategy never sees it. Each agent's LLM reasoning trace (internal to the Anthropic API call) is ephemeral and not stored. The Evaluator sees strategy outputs but not their system prompts.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field field-z4">
+          <div class="field-num field-num-4">12</div>
+          <div class="field-header">
+            <span class="field-icon">⚠️</span>
+            <span class="field-title field-title-4">System Failure Modes & Escalation</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Cascade</span>
+              <span class="field-row-text">If Market Data returns incorrect indicators (e.g., wrong RSI calculation), both strategy agents reason on corrupted data and the Evaluator synthesizes corrupted outputs — a full-chain cascade. If one strategy agent hallucinates a data point not in its input, the Evaluator may incorporate the hallucination into its analysis.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Deadlock</span>
+              <span class="field-row-text">Minimal risk due to single-pass architecture. The only potential stall is Anthropic API timeout or rate limiting. Mitigated by 3 retries with backoff and a fallback ERROR dict that allows the pipeline to continue past a failed LLM call.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Herd</span>
+              <span class="field-row-text">Primary herd risk: both agents converge to identical HOLD recommendations with generic reasoning, collapsing designed disagreement. This is the most likely failure mode and manifests when prompts are insufficiently differentiated or when a stock's data has no extreme signals. Secondary: the Evaluator may validate weak strategy reasoning rather than critiquing it.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Escalate</span>
+              <span class="field-row-text">No automated escalation. All escalation is post-hoc human review: the student examines JSON outputs for generic justifications, data-free reasoning, universal agreement, or internally inconsistent recommendations. Weak results are documented in the required "failure or surprise" section of the report.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIELD 13: Scenario & Uncertainty Management -->
+      <div class="row row-full">
+        <div class="field field-z4">
+          <div class="field-num field-num-4">13</div>
+          <div class="field-header">
+            <span class="field-icon">🎲</span>
+            <span class="field-title field-title-4">Scenario & Uncertainty Management</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Uncertainty</span>
+              <span class="field-row-text"><strong>Data uncertainty:</strong> yfinance data may have gaps, splits, or delayed updates. <strong>Model uncertainty:</strong> LLM reasoning is non-deterministic even at low temperature; the same data may produce different recommendations on re-run. <strong>Parameter uncertainty:</strong> indicator thresholds (RSI overbought at 70 vs. 75, drawdown significance at 20% vs. 30%) are hardcoded in prompts and may not suit all market regimes.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Scenarios</span>
+              <span class="field-row-text">Six stocks are deliberately chosen to represent distinct market scenarios: strong uptrend (NVDA), high volatility (TSLA), stable/sideways (JNJ), significant decline (INTC), meme/retail volatility (GME), and large bank / rate–credit cycle (JPM). This selection is designed to surface at least one agreement and one sharp disagreement. The student selects scenarios; the system does not generate them.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Communication</span>
+              <span class="field-row-text">Uncertainty is communicated via confidence scores (1–10) from each strategy agent, the Evaluator's narrative analysis of divergence, and the explicit agents_agree boolean. The system does not produce probability distributions or confidence intervals — uncertainty is surfaced qualitatively through the comparison of opposing perspectives.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Purpose</span>
+              <span class="field-row-text"><strong>Explore.</strong> Explores how multiple behavioral frameworks (including optional third) interpret the same evidence; value is in comparison, not forecasting.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-full">
+        <div class="field field-z4 bookend-4">
+          <div class="field-num field-num-4">14</div>
+          <div class="field-header">
+            <span class="field-icon">✅</span>
+            <span class="field-title prominent field-title-4">System Success Criteria</span>
+          </div>
+          <div class="field-rows">
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Individual</span>
+              <span class="field-row-text">Each strategy agent produces a valid JSON with a clear BUY/HOLD/SELL decision, confidence 1–10, and a 3–5 sentence justification that references ≥3 specific data points from the market data. The Evaluator produces an analysis that identifies the behavioral logic behind agreement or disagreement, not mere restatement of decisions.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Collective</span>
+              <span class="field-row-text">The multi-agent system produces meaningfully different recommendations across the stock set — at least one agreement and at least one disagreement. The two strategies' outputs must be distinguishable in reasoning style and data emphasis, not just in the final decision label. A single agent prompted to "consider both perspectives" could not produce the same structured independence.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Emergent</span>
+              <span class="field-row-text">Monitor for convergence collapse (both agents always agree), justification drift (reasoning disconnects from provided data), and personality leakage (Momentum Trader citing contrarian logic or vice versa). Any of these indicate prompt design failure and should be documented as the required "failure or surprise" case.</span>
+            </div>
+            <div class="field-row">
+              <span class="field-row-label field-row-label-4">Safety</span>
+              <span class="field-row-text">No financial actions taken. No data written outside outputs/. No PII processed. All API keys loaded from environment variables, never hardcoded. Outputs are clearly labeled as analytical exercises, not investment advice. The system gracefully degrades on LLM failure (ERROR fallback) rather than crashing.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container footer">
+    <span class="footer-left">Define structure and behavior before choosing multi-agent architecture</span>
+    <span class="footer-right">Carnegie Mellon University · Heinz College</span>
+  </div>
+  <div class="container" style="text-align:center; margin-top:10px; padding-top:6px; border-top:1px solid #e0e0e0;">
+    <span style="font-size:9px; color:#888; font-style:italic;">Canvas framework by Prof. Anand S. Rao</span>
+  </div>
+</div>
+
+</body>
+</html>

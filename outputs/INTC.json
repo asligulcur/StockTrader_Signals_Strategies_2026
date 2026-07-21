@@ -1,0 +1,50 @@
+{
+  "ticker": "INTC",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 62.38,
+    "price_30d_ago": 45.46,
+    "pct_change_30d": 37.2195,
+    "avg_daily_volume_20d": 102888600,
+    "volatility_30d": 4.6105,
+    "volatility_90d": 4.6387,
+    "atr_14": 3.16,
+    "atr_pct_of_price": 5.0657,
+    "moving_avg_20d": 48.181,
+    "moving_avg_50d": 47.2076,
+    "rsi_14": 80.3542,
+    "52_week_high": 62.38,
+    "52_week_low": 18.84,
+    "pct_from_52w_high": 0.0,
+    "pct_from_52w_low": 231.104,
+    "volume_trend": "increasing",
+    "pct_change_90d": 53.7968,
+    "max_drawdown_90d": -24.1716,
+    "recent_drawdown_5d": 23.819,
+    "max_single_day_drop_90d": -17.0287
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "HOLD",
+    "confidence": 5,
+    "justification": "INTC is in a screaming uptrend — up 53.8% over 90 days and sitting at its 52-week high with price 29.5% above the 20-day moving average — but the RSI of 80.35 is a serious red flag that screams overbought exhaustion, well above my 75 threshold. The 5-day price surge of 23.8% is parabolic and suggests a near-term blowoff top rather than sustainable momentum. Volume trend is increasing and 20 of the last 30 days were positive, which confirms the trend, but chasing a stock this extended above its moving averages with RSI this elevated is a recipe for getting caught in a violent reversal. I'll hold and wait for a pullback toward the 20-day MA or an RSI reset below 70 before committing to a full BUY signal."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "SELL",
+    "confidence": 9,
+    "justification": "INTC is sitting exactly at its 52-week high of $62.38, having surged an extraordinary 53.8% from its 90-day price — this is the definition of the euphoria I sell into. The RSI of 80.35 is deeply overbought, well above my 70 threshold, signaling that emotional momentum buyers have pushed this far beyond rational valuation. The recent 5-day price change alone is 23.8%, which is an unsustainable parabolic move that screams capitulation buying rather than fundamental re-rating. High volatility of 4.61% daily standard deviation confirms this is an emotionally-driven market, and when the crowd is this greedy, my discipline demands I exit. The best trades feel uncomfortable — and selling a stock up 231% from its 52-week low feels very uncomfortable, which is exactly why I'm doing it."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "SELL",
+    "confidence": 9,
+    "justification": "INTC's 30-day volatility of 4.61% and 90-day volatility of 4.64% are both alarmingly elevated, indicating a persistently turbulent tape with no sign of calming. The ATR as a percentage of price stands at 5.07%, meaning daily swings are consuming over 5 cents on every dollar invested — far too wide for a volatility-averse posture. Most critically, the worst single-day drop over the last 90 trading days was -17.03%, and the 90-day max drawdown reached -24.17%, confirming severe tail risk lurking in this name's recent history. The explosive 23.8% five-day surge and 53.8% 90-day rally may attract momentum chasers, but from my perspective, violent moves in both directions signal an uncontrolled, whipsaw-prone stock that I want no part of. Survival comes first — this is not a smooth, orderly tape, and I reduce exposure accordingly."
+  },
+  "evaluator": {
+    "agents_agree": false,
+    "agents_all_agree": false,
+    "analysis": "The Value Contrarian and Volatility Averse strategies both arrive at SELL with high confidence (9/10 each), but through fundamentally different lenses: the Contrarian reads the 53.8% 90-day surge and RSI of 80.35 as crowd euphoria to fade, while the Volatility Averse focuses on the 4.61% daily standard deviation, 5.07% ATR-to-price ratio, and the -17.03% worst single-day drop as evidence of an uncontrolled, tail-risk-laden tape. The Momentum Trader, by contrast, acknowledges the same overbought signals — RSI at 80.35, price 29.5% above the 20-day MA, and a parabolic 5-day move of 23.8% — but cannot bring itself to sell because the underlying trend metrics (20 of 30 positive days, price at 52-week high, both MAs rising) remain structurally bullish, landing it at HOLD rather than SELL. The Contrarian's anchor is mean-reversion: a stock sitting exactly at its 52-week high of $62.38 after a 231% rally from its 52-week low represents peak greed, which is precisely the exit signal its framework demands. The Volatility Averse strategy is indifferent to whether the move is euphoric or fundamental — the -24.17% 90-day max drawdown and persistent 4.6% daily volatility represent path risk that violates its core survival-first mandate regardless of direction. The Momentum Trader's hesitation stems from conflicting internal signals: trend confirmation is present, but the RSI threshold breach at 80.35 and parabolic extension above moving averages trigger its blowoff-top warning, producing a low-conviction HOLD rather than a directional call. What separates the two SELL votes from the HOLD is the weighting of downside asymmetry: both sellers treat the current price level as a high-probability reversal zone, while the Momentum Trader treats it as a pause point within a still-intact trend."
+  },
+  "three_way_pattern": "two_one"
+}

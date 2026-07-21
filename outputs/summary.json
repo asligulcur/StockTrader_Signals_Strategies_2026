@@ -1,0 +1,76 @@
+{
+  "bonus_implementation": "third_strategy_agent",
+  "third_strategy": "Volatility Averse",
+  "strategies": [
+    "Momentum Trader",
+    "Value Contrarian",
+    "Volatility Averse"
+  ],
+  "stocks_analyzed": [
+    "NVDA",
+    "TSLA",
+    "JNJ",
+    "INTC",
+    "GME",
+    "JPM"
+  ],
+  "total_agreements_ab": 2,
+  "total_disagreements_ab": 4,
+  "total_all_three_agree": 1,
+  "results": [
+    {
+      "ticker": "NVDA",
+      "a_decision": "BUY",
+      "b_decision": "HOLD",
+      "c_decision": "SELL",
+      "agree_ab": false,
+      "all_three_agree": false,
+      "three_way_pattern": "all_three_distinct"
+    },
+    {
+      "ticker": "TSLA",
+      "a_decision": "SELL",
+      "b_decision": "BUY",
+      "c_decision": "SELL",
+      "agree_ab": false,
+      "all_three_agree": false,
+      "three_way_pattern": "two_one"
+    },
+    {
+      "ticker": "JNJ",
+      "a_decision": "HOLD",
+      "b_decision": "HOLD",
+      "c_decision": "BUY",
+      "agree_ab": true,
+      "all_three_agree": false,
+      "three_way_pattern": "two_one"
+    },
+    {
+      "ticker": "INTC",
+      "a_decision": "HOLD",
+      "b_decision": "SELL",
+      "c_decision": "SELL",
+      "agree_ab": false,
+      "all_three_agree": false,
+      "three_way_pattern": "two_one"
+    },
+    {
+      "ticker": "GME",
+      "a_decision": "HOLD",
+      "b_decision": "HOLD",
+      "c_decision": "HOLD",
+      "agree_ab": true,
+      "all_three_agree": true,
+      "three_way_pattern": "unanimous"
+    },
+    {
+      "ticker": "JPM",
+      "a_decision": "HOLD",
+      "b_decision": "SELL",
+      "c_decision": "HOLD",
+      "agree_ab": false,
+      "all_three_agree": false,
+      "three_way_pattern": "two_one"
+    }
+  ]
+}

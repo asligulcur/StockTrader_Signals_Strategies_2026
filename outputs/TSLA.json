@@ -1,0 +1,50 @@
+{
+  "ticker": "TSLA",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 348.95,
+    "price_30d_ago": 408.58,
+    "pct_change_30d": -14.5944,
+    "avg_daily_volume_20d": 64842260,
+    "volatility_30d": 2.3797,
+    "volatility_90d": 2.3234,
+    "atr_14": 15.43,
+    "atr_pct_of_price": 4.4218,
+    "moving_avg_20d": 370.8505,
+    "moving_avg_50d": 394.3058,
+    "rsi_14": 41.9688,
+    "52_week_high": 489.88,
+    "52_week_low": 227.5,
+    "pct_from_52w_high": -28.7683,
+    "pct_from_52w_low": 53.3846,
+    "volume_trend": "increasing",
+    "pct_change_90d": -18.8809,
+    "max_drawdown_90d": -29.9318,
+    "recent_drawdown_5d": -3.228,
+    "max_single_day_drop_90d": -5.4215
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "SELL",
+    "confidence": 8,
+    "justification": "TSLA is trading at $348.95, sitting -5.9% below its 20-day moving average and -11.5% below its 50-day moving average — a clear bearish positioning that signals the trend has reversed. The RSI of 41.97 is approaching oversold territory but hasn't bounced, confirming sustained selling pressure rather than a recovery setup. The 30-day price change of -14.59% and 90-day change of -18.88% paint a consistent downtrend with no sign of reversal, and negative days (16) outnumber positive days (14) over the last month. Even with increasing volume, that volume is confirming the downtrend rather than supporting a bullish case — the trend is clearly down and momentum traders must respect it."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "BUY",
+    "confidence": 6,
+    "justification": "TSLA is sitting 28.77% below its 52-week high of $489.88, firmly in the territory where fear-driven selling creates contrarian opportunity. The 90-day max drawdown of -29.93% suggests meaningful capitulation has occurred, and the RSI of 41.97 is approaching oversold territory without yet triggering a full panic flush. The recent 5-day decline of -3.23% on top of an already beaten-down price suggests continued selling pressure, but this is precisely the uncomfortable entry point that tends to reward patient contrarians. However, the RSI has not yet breached the 35 threshold I prefer, and the stock remains well above its 52-week low of $227.50, so I temper my confidence — this is a measured buy, not an aggressive one."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "SELL",
+    "confidence": 8,
+    "justification": "TSLA's 30-day volatility of 2.38% and 90-day volatility of 2.32% in daily returns are both elevated, indicating a persistently turbulent tape with no sign of calming. The ATR as a percentage of price stands at 4.42%, meaning the stock routinely swings more than 4% of its value in a single day — far too wide for a volatility-averse posture. The worst single-day drop over the last 90 trading days was -5.42%, and the max drawdown reached -29.93%, confirming that the path has been genuinely dangerous rather than merely drifting lower. These metrics collectively describe a chaotic, high-risk ride that violates my core requirement of orderly, controlled price action, and I would rather step aside than absorb further whipsaw risk."
+  },
+  "evaluator": {
+    "agents_agree": false,
+    "agents_all_agree": false,
+    "analysis": "Momentum Trader and Volatility Averse both arrive at SELL but through entirely different lenses: Momentum anchors on the price trend itself — TSLA trading 5.9% below its 20-day MA, 11.5% below its 50-day MA, and posting -14.59% over 30 days with negative days (16) outnumbering positive (14) — while Volatility Averse focuses on the turbulence of the path, citing a 2.38% daily volatility, a 4.42% ATR-to-price ratio, and a worst single-day drop of -5.42% as conditions that make the ride itself unacceptable regardless of direction. Value Contrarian is the outlier, issuing a BUY at confidence 6/10, because it interprets the same price damage — a 28.77% decline from the 52-week high of $489.88 and a 90-day max drawdown of -29.93% — as evidence of fear-driven capitulation rather than a trend to follow. The Contrarian's hesitation is visible in its own framing: RSI at 41.97 has not yet breached the preferred 35 threshold, and the stock remains well above its 52-week low of $227.50, which is why confidence is tempered rather than aggressive. Momentum Trader reads the same RSI of 41.97 as confirmation of sustained selling pressure with no bounce, not as a setup for mean reversion. Volatility Averse is indifferent to whether the stock is cheap or trending — the 4.42% daily ATR and persistent turbulence alone disqualify it from a low-risk hold. The split reflects a fundamental philosophical divide: Contrarian weights distance from peak and potential capitulation, while Momentum and Volatility Averse both weight current conditions — one through directional signal, the other through path risk — and both conclude the environment demands an exit."
+  },
+  "three_way_pattern": "two_one"
+}

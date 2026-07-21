@@ -1,0 +1,50 @@
+{
+  "ticker": "GME",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 23.22,
+    "price_30d_ago": 24.1,
+    "pct_change_30d": -3.6515,
+    "avg_daily_volume_20d": 5879595,
+    "volatility_30d": 1.7294,
+    "volatility_90d": 2.2697,
+    "atr_14": 0.7307,
+    "atr_pct_of_price": 3.1469,
+    "moving_avg_20d": 23.004,
+    "moving_avg_50d": 23.6994,
+    "rsi_14": 56.1437,
+    "52_week_high": 35.01,
+    "52_week_low": 19.94,
+    "pct_from_52w_high": -33.6761,
+    "pct_from_52w_low": 16.4493,
+    "volume_trend": "stable",
+    "pct_change_90d": 3.0626,
+    "max_drawdown_90d": -14.5068,
+    "recent_drawdown_5d": -0.5993,
+    "max_single_day_drop_90d": -5.1451
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "HOLD",
+    "confidence": 4,
+    "justification": "GME is sitting in a mixed signal zone — price is just barely above the 20-day MA at +0.939% but is below the 50-day MA by -2.02%, which fails my core BUY requirement of being above both moving averages. The RSI at 56.14 is in the acceptable momentum range, but the trend is not confirming: the 30-day price change is -3.65% and the stock has had more negative days than positive (16 vs 14) in the last 30 sessions. Volume trend is stable rather than increasing, which means there's no volume confirmation of a breakout. I'll wait for price to reclaim the 50-day MA with conviction before committing to a BUY."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "HOLD",
+    "confidence": 5,
+    "justification": "GME is sitting 33.68% below its 52-week high of $35.01, which would normally attract my contrarian interest, but the RSI of 56.14 is squarely in neutral territory — neither oversold nor overbought — suggesting no extreme fear signal to act on. The stock is only 16.45% above its 52-week low, meaning it hasn't capitulated to the kind of panic levels that typically mark a compelling entry point. The 90-day max drawdown of -14.51% is modest, and the price is essentially flat over 90 days (+3.06%), indicating a stock drifting sideways rather than experiencing the sharp, fear-driven selloff I look for. I'd rather wait for RSI to drop below 35 or for the price to approach that $19.94 low before committing capital — patience is the edge here."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "HOLD",
+    "confidence": 5,
+    "justification": "The 30-day volatility of 1.73% is relatively modest and trending down from the 90-day figure of 2.27%, suggesting some recent calming — but the 90-day reading remains elevated enough to prevent a confident BUY signal. The ATR as a percentage of price at 3.15% is uncomfortably wide, meaning daily swings are consuming a meaningful portion of the stock's value and the ride is not smooth enough for aggressive entry. The worst single-day drop over the last 90 days was -5.15%, and the max drawdown reached -14.51%, both of which indicate meaningful tail risk lurking beneath the surface. With mixed signals — 30-day volatility improving but ATR and historical drawdown still elevated — this sits squarely in the middle band where my framework calls for patience rather than action."
+  },
+  "evaluator": {
+    "agents_agree": true,
+    "agents_all_agree": true,
+    "analysis": "All three strategies converge on HOLD for GME, though each arrives there through a distinct behavioral lens anchored in different data points. The Momentum Trader is blocked from a BUY primarily because price sits 2.02% below the 50-day MA at $23.6994, and the 30-day change of -3.65% combined with more negative days than positive (16 vs 14) fails to confirm an uptrend worth chasing. The Value Contrarian acknowledges the 33.68% pullback from the 52-week high of $35.01 as superficially interesting, but the RSI of 56.14 in neutral territory and the price being only 16.45% above its 52-week low signal that no genuine fear-driven capitulation has occurred — the stock is drifting, not panicking. The Volatility Averse strategy notes that while 30-day volatility has calmed to 1.73% from the 90-day reading of 2.27%, the ATR of 3.15% of price and a worst single-day drop of -5.15% over 90 days indicate that path risk remains too elevated for a comfortable entry. What unites all three is the absence of a compelling trigger: no trend breakout, no oversold extreme, and no volatility compression sufficient to justify new exposure. The sideways drift — essentially flat over 90 days at +3.06% — is interpreted as ambiguity by all three frameworks, each of which requires a cleaner signal before committing capital. This rare three-way alignment on HOLD reflects a stock caught in a no-man's land that simultaneously fails the entry criteria of trend-following, mean-reversion, and risk-management disciplines."
+  },
+  "three_way_pattern": "unanimous"
+}

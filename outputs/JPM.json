@@ -1,0 +1,50 @@
+{
+  "ticker": "JPM",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 309.87,
+    "price_30d_ago": 304.5713,
+    "pct_change_30d": 1.7397,
+    "avg_daily_volume_20d": 10134975,
+    "volatility_30d": 1.4055,
+    "volatility_90d": 1.6191,
+    "atr_14": 7.1124,
+    "atr_pct_of_price": 2.2953,
+    "moving_avg_20d": 291.8914,
+    "moving_avg_50d": 298.0342,
+    "rsi_14": 73.692,
+    "52_week_high": 332.9062,
+    "52_week_low": 224.6216,
+    "pct_from_52w_high": -6.9197,
+    "pct_from_52w_low": 37.952,
+    "volume_trend": "decreasing",
+    "pct_change_90d": -0.07,
+    "max_drawdown_90d": -15.4717,
+    "recent_drawdown_5d": 5.7216,
+    "max_single_day_drop_90d": -4.6635
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "HOLD",
+    "confidence": 5,
+    "justification": "JPM is trading at $309.87, sitting comfortably above both the 20-day MA ($291.89) and 50-day MA ($298.03), which confirms the uptrend structure. However, the RSI at 73.69 is dangerously close to the overbought threshold of 75, signaling that momentum may be nearing exhaustion rather than just getting started. Volume trend is decreasing, which is a red flag — rising prices on declining volume suggests the move lacks conviction and could stall or reverse. The 90-day price change is essentially flat at -0.07%, meaning the longer-term trend is not as strong as the short-term pop suggests. I'll hold here and wait for either a pullback to the moving averages with RSI cooling off, or a volume-confirmed breakout to new highs before committing to a full BUY."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "SELL",
+    "confidence": 7,
+    "justification": "JPM's RSI of 73.69 is firmly in overbought territory, a clear signal that the market is pricing in excessive optimism. The stock has surged 5.72% in just the last 5 days, a sharp short-term move that smells of euphoria rather than fundamental repricing. At only 6.92% below its 52-week high of $332.91, JPM is nowhere near the deep discount zone that would attract my interest as a buyer. The stock is also trading 6.16% above its 20-day moving average, confirming the near-term froth. As a contrarian, I sell into this kind of momentum-driven enthusiasm and wait for a more fearful entry point."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "HOLD",
+    "confidence": 6,
+    "justification": "The 30-day volatility of 1.41% is somewhat elevated but not extreme, while the 90-day volatility of 1.62% suggests the broader recent period has been choppier than the last month — a mixed signal that doesn't cleanly justify adding exposure. The ATR as a percentage of price at 2.30% indicates daily swings are meaningfully wide relative to the $309.87 price, which is uncomfortable for a volatility-averse posture. The worst single-day drop of -4.66% over the last 90 days and a max drawdown of -15.47% confirm that this path has had genuine turbulence, not the orderly, controlled tape I require to buy aggressively. The recent 5-day surge of 5.72% also introduces gap-and-reversal risk, making this an environment to observe rather than act on."
+  },
+  "evaluator": {
+    "agents_agree": false,
+    "agents_all_agree": false,
+    "analysis": "Momentum and Contrarian disagree here, with Volatility Averse siding with Momentum on a HOLD decision, leaving the Contrarian as the lone outlier recommending SELL. The Momentum Trader acknowledges the bullish structure — price sitting above both the 20-day MA ($291.89) and 50-day MA ($298.03) — but is restrained by the RSI at 73.69 approaching the 75 overbought threshold and declining volume, which together suggest the trend lacks conviction for a full BUY commitment. The Value Contrarian interprets the same RSI reading and the 5.72% five-day surge as signs of euphoric excess, and notes that at only 6.92% below the 52-week high of $332.91, there is no meaningful discount to justify a contrarian entry — making SELL the logical response to what it sees as momentum-driven froth. The Volatility Averse strategy anchors its HOLD on path risk metrics: the ATR of 2.30% of price, a worst single-day drop of -4.66%, and 90-day volatility of 1.62% exceeding 30-day volatility of 1.41%, all of which signal a choppier recent history that discourages aggressive positioning. Where Momentum and Volatility Averse converge on HOLD, they do so for different reasons — Momentum waits for trend confirmation or a pullback, while Volatility Averse waits for a calmer tape. The Contrarian's divergence stems from its mean-reversion framework, which treats the same overbought signals and near-highs positioning as a selling opportunity rather than a reason to wait. All three strategies register discomfort with the current setup, but only the Contrarian translates that discomfort into an active exit rather than a passive pause."
+  },
+  "three_way_pattern": "two_one"
+}

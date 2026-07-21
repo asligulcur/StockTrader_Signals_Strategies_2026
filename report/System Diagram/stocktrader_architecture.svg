@@ -1,0 +1,331 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 820" font-family="Georgia, 'Palatino Linotype', serif">
+  <defs>
+    <!-- Subtle grid pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e8ecf0" stroke-width="0.5" opacity="0.5"/>
+    </pattern>
+    <!-- Drop shadows -->
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1a1a2e" flood-opacity="0.08"/>
+    </filter>
+    <filter id="shadow-lg" x="-4%" y="-4%" width="108%" height="116%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#1a1a2e" flood-opacity="0.12"/>
+    </filter>
+    <!-- Arrow markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2B579A"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0D6B5E"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#9B2335"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#5E35B1"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8a8a9a"/>
+    </marker>
+    <!-- Gradients -->
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F7F8FA"/>
+      <stop offset="100%" stop-color="#EEF0F5"/>
+    </linearGradient>
+    <linearGradient id="header-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#990000"/>
+      <stop offset="50%" stop-color="#990000"/>
+      <stop offset="100%" stop-color="#990000" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="820" fill="url(#bg-grad)"/>
+  <rect width="1100" height="820" fill="url(#grid)"/>
+
+  <!-- Header -->
+  <text x="55" y="42" font-size="22" font-weight="700" fill="#1a1a2e" letter-spacing="-0.3">StockTrader — System Architecture</text>
+  <text x="55" y="60" font-size="10.5" fill="#5a5a6a" font-style="italic">Parallel fan-out: Market Data → Momentum ∥ Value Contrarian ∥ Volatility Averse (bonus) → Evaluator → JSON</text>
+  <line x1="55" y1="70" x2="1045" y2="70" stroke="url(#header-line)" stroke-width="2"/>
+  <text x="1045" y="42" font-size="10" font-weight="600" fill="#990000" text-anchor="end">94815 · Agentic Technologies</text>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- PHASE LABELS (left column) -->
+  <!-- ════════════════════════════════════════════ -->
+  <g opacity="0.6">
+    <text x="30" y="155" font-size="8" fill="#2B579A" font-weight="700" letter-spacing="2" text-anchor="middle" transform="rotate(-90, 30, 155)">PHASE 1</text>
+    <text x="30" y="390" font-size="8" fill="#0D6B5E" font-weight="700" letter-spacing="2" text-anchor="middle" transform="rotate(-90, 30, 390)">PHASE 2</text>
+    <text x="30" y="580" font-size="8" fill="#9B2335" font-weight="700" letter-spacing="2" text-anchor="middle" transform="rotate(-90, 30, 580)">PHASE 3</text>
+    <text x="30" y="740" font-size="8" fill="#5E35B1" font-weight="700" letter-spacing="2" text-anchor="middle" transform="rotate(-90, 30, 740)">PHASE 4</text>
+  </g>
+
+  <!-- Phase flow indicator (left bar) -->
+  <rect x="42" y="95" width="4" height="700" rx="2" opacity="0.15" fill="#1a1a2e"/>
+  <rect x="42" y="95" width="4" height="120" rx="2" opacity="0.3" fill="#2B579A"/>
+  <rect x="42" y="260" width="4" height="240" rx="2" opacity="0.3" fill="#0D6B5E"/>
+  <rect x="42" y="520" width="4" height="130" rx="2" opacity="0.3" fill="#9B2335"/>
+  <rect x="42" y="670" width="4" height="125" rx="2" opacity="0.3" fill="#5E35B1"/>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- INPUT: Ticker List -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow)">
+    <rect x="395" y="90" width="310" height="52" rx="8" fill="#fff" stroke="#B8CCE4" stroke-width="1.5"/>
+    <rect x="395" y="90" width="4" height="52" rx="2" fill="#2B579A"/>
+    <text x="420" y="108" font-size="9" fill="#2B579A" font-weight="700" letter-spacing="1.5">INPUT</text>
+    <text x="420" y="124" font-size="11" fill="#1a1a2e" font-weight="600">config.py → TICKERS (6)</text>
+    <text x="420" y="138" font-size="10" fill="#1a1a2e" font-weight="500">NVDA, TSLA, JNJ, INTC, GME, JPM</text>
+  </g>
+
+  <!-- Arrow: Input → Market Data -->
+  <line x1="550" y1="142" x2="550" y2="165" stroke="#2B579A" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- MARKET DATA COMPONENT -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow-lg)">
+    <rect x="280" y="170" width="540" height="80" rx="10" fill="#F0F4FA" stroke="#B8CCE4" stroke-width="1.5"/>
+    <rect x="280" y="170" width="540" height="80" rx="10" fill="url(#bg-grad)" opacity="0.3"/>
+    <!-- Left accent bar -->
+    <rect x="280" y="170" width="5" height="80" rx="2.5" fill="#2B579A"/>
+    <!-- Badge -->
+    <rect x="300" y="180" width="18" height="18" rx="9" fill="#2B579A"/>
+    <text x="309" y="193" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">1</text>
+    <text x="326" y="193" font-size="13" fill="#2B579A" font-weight="700">Market Data Component</text>
+    <text x="575" y="193" font-size="9" fill="#8a8a9a" font-style="italic">market_data.py · Non-LLM · Deterministic</text>
+    <!-- Details -->
+    <text x="310" y="215" font-size="10" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#2B579A">IN </tspan>Stock ticker string
+      <tspan dx="30" font-weight="700" fill="#2B579A">OUT </tspan>Dict with ~25 indicators (MAs, RSI, ATR, σ30/σ90, drawdowns, volume)
+    </text>
+    <text x="310" y="232" font-size="10" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#2B579A">API </tspan>yfinance (read-only)
+      <tspan dx="20" font-weight="700" fill="#2B579A">LLM </tspan>None
+      <tspan dx="20" font-weight="700" fill="#2B579A">DENY </tspan>Any LLM call, any write operation
+    </text>
+  </g>
+
+  <!-- yfinance callout -->
+  <g filter="url(#shadow)">
+    <rect x="860" y="185" width="150" height="46" rx="6" fill="#fff" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="935" y="206" font-size="10" fill="#666" text-anchor="middle" font-weight="600">yfinance API</text>
+    <text x="935" y="221" font-size="9" fill="#999" text-anchor="middle">120 days OHLCV data</text>
+  </g>
+  <line x1="820" y1="210" x2="855" y2="210" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-gray)"/>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- FORK: Parallel Fan-Out -->
+  <!-- ════════════════════════════════════════════ -->
+  <line x1="550" y1="250" x2="550" y2="275" stroke="#0D6B5E" stroke-width="2"/>
+  <!-- Fork diamond -->
+  <polygon points="550,275 560,290 550,305 540,290" fill="#0D6B5E" opacity="0.9"/>
+  <text x="550" y="294" font-size="7" fill="#fff" text-anchor="middle" font-weight="700">∥</text>
+  <!-- Fork label -->
+  <text x="575" y="294" font-size="9" fill="#0D6B5E" font-weight="600" font-style="italic">parallel fan-out</text>
+
+  <!-- Three parallel branches -->
+  <path d="M 540,290 L 210,290 L 210,325" fill="none" stroke="#0D6B5E" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <path d="M 550,305 L 550,325" fill="none" stroke="#0D6B5E" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <path d="M 560,290 L 890,290 L 890,325" fill="none" stroke="#0D6B5E" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+  <!-- Data labels -->
+  <g>
+    <rect x="130" y="297" width="92" height="16" rx="3" fill="#B2E0D6" opacity="0.5"/>
+    <text x="176" y="309" font-size="7.5" fill="#0D6B5E" text-anchor="middle" font-weight="600">same dict</text>
+  </g>
+  <g>
+    <rect x="504" y="297" width="92" height="16" rx="3" fill="#B2E0D6" opacity="0.5"/>
+    <text x="550" y="309" font-size="7.5" fill="#0D6B5E" text-anchor="middle" font-weight="600">same dict</text>
+  </g>
+  <g>
+    <rect x="878" y="297" width="92" height="16" rx="3" fill="#B2E0D6" opacity="0.5"/>
+    <text x="924" y="309" font-size="7.5" fill="#0D6B5E" text-anchor="middle" font-weight="600">same dict</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- MOMENTUM TRADER (Strategy A) -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow-lg)">
+    <rect x="50" y="330" width="320" height="165" rx="10" fill="#EBF7F4" stroke="#8ECFC4" stroke-width="2"/>
+    <rect x="50" y="330" width="5" height="165" rx="2.5" fill="#0D6B5E"/>
+    <rect x="70" y="340" width="18" height="18" rx="9" fill="#0D6B5E"/>
+    <text x="79" y="353" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">2</text>
+    <text x="96" y="353" font-size="12.5" fill="#0D6B5E" font-weight="700">Momentum Trader</text>
+    <text x="70" y="370" font-size="8" fill="#8a8a9a" font-style="italic">strategy_a · prompts/strategy_a.txt</text>
+    <rect x="70" y="378" width="280" height="22" rx="4" fill="#B2E0D6" opacity="0.3"/>
+    <text x="78" y="393" font-size="9" fill="#0D6B5E" font-weight="700" font-style="italic">"The trend is your friend."</text>
+    <text x="70" y="412" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">PRIORITIZE </tspan>MAs · volume · RSI
+    </text>
+    <text x="70" y="426" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">IGNORE </tspan>52w · DD · vol
+    </text>
+    <text x="70" y="440" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">OUT </tspan>JSON decision + confidence + justification
+    </text>
+  </g>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- VALUE CONTRARIAN (Strategy B) -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow-lg)">
+    <rect x="390" y="330" width="320" height="165" rx="10" fill="#EBF7F4" stroke="#8ECFC4" stroke-width="2"/>
+    <rect x="390" y="330" width="5" height="165" rx="2.5" fill="#0D6B5E"/>
+    <rect x="410" y="340" width="18" height="18" rx="9" fill="#0D6B5E"/>
+    <text x="419" y="353" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">3</text>
+    <text x="436" y="353" font-size="12.5" fill="#0D6B5E" font-weight="700">Value Contrarian</text>
+    <text x="410" y="370" font-size="8" fill="#8a8a9a" font-style="italic">strategy_b · prompts/strategy_b.txt</text>
+    <rect x="410" y="378" width="280" height="22" rx="4" fill="#B2E0D6" opacity="0.3"/>
+    <text x="418" y="393" font-size="9" fill="#0D6B5E" font-weight="700" font-style="italic">"Buy fear, sell greed."</text>
+    <text x="410" y="412" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">PRIORITIZE </tspan>52w · RSI · drawdown
+    </text>
+    <text x="410" y="426" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">IGNORE </tspan>MA cross · volume trend
+    </text>
+    <text x="410" y="440" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">OUT </tspan>JSON decision + confidence + justification
+    </text>
+  </g>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- VOLATILITY AVERSE (Strategy C · bonus) -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow-lg)">
+    <rect x="730" y="330" width="320" height="165" rx="10" fill="#EBF7F4" stroke="#8ECFC4" stroke-width="2"/>
+    <rect x="730" y="330" width="5" height="165" rx="2.5" fill="#0D6B5E"/>
+    <rect x="750" y="340" width="18" height="18" rx="9" fill="#0D6B5E"/>
+    <text x="759" y="353" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">4</text>
+    <text x="776" y="353" font-size="12.5" fill="#0D6B5E" font-weight="700">Volatility Averse</text>
+    <text x="750" y="370" font-size="8" fill="#8a8a9a" font-style="italic">strategy_c · prompts/strategy_c.txt · bonus</text>
+    <rect x="750" y="378" width="280" height="22" rx="4" fill="#B2E0D6" opacity="0.3"/>
+    <text x="758" y="393" font-size="9" fill="#0D6B5E" font-weight="700" font-style="italic">"Survive first — calm tape, contained risk."</text>
+    <text x="750" y="412" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">PRIORITIZE </tspan>σ30/σ90 · ATR · worst 1d drop
+    </text>
+    <text x="750" y="426" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">IGNORE </tspan>52w story as primary driver
+    </text>
+    <text x="750" y="440" font-size="9" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#0D6B5E">OUT </tspan>JSON → strategy_c in outputs
+    </text>
+  </g>
+
+  <!-- Isolation barriers (no cross-talk between strategies) -->
+  <line x1="385" y1="335" x2="385" y2="488" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+  <line x1="725" y1="335" x2="725" y2="488" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+  <g>
+    <rect x="494" y="500" width="112" height="14" rx="3" fill="#FDF2F3"/>
+    <text x="550" y="510" font-size="7.5" fill="#9B2335" text-anchor="middle" font-weight="700" letter-spacing="0.5">PAIRWISE ISOLATED</text>
+  </g>
+
+  <!-- Anthropic callout (shared by all three) -->
+  <g filter="url(#shadow)">
+    <rect x="20" y="388" width="78" height="56" rx="6" fill="#fff" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="59" y="408" font-size="9.5" fill="#666" text-anchor="middle" font-weight="600">Anthropic API</text>
+    <text x="59" y="422" font-size="8.5" fill="#999" text-anchor="middle">Claude Sonnet 4.6</text>
+    <text x="59" y="435" font-size="8.5" fill="#999" text-anchor="middle">temp: 0.3</text>
+  </g>
+  <line x1="98" y1="416" x2="48" y2="416" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-gray)"/>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- JOIN: Convergence Barrier -->
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Three branches down to convergence -->
+  <path d="M 210,495 L 210,550 L 540,550" fill="none" stroke="#9B2335" stroke-width="2"/>
+  <path d="M 550,495 L 550,540" fill="none" stroke="#9B2335" stroke-width="2"/>
+  <path d="M 890,495 L 890,550 L 560,550" fill="none" stroke="#9B2335" stroke-width="2"/>
+  <!-- Join diamond -->
+  <polygon points="550,540 560,550 550,560 540,550" fill="#9B2335" opacity="0.9"/>
+  <text x="550" y="554" font-size="7" fill="#fff" text-anchor="middle" font-weight="700">⊕</text>
+  <!-- Join label -->
+  <text x="575" y="554" font-size="9" fill="#9B2335" font-weight="600" font-style="italic">convergence barrier</text>
+
+  <!-- Arrow: Join → Evaluator -->
+  <line x1="550" y1="560" x2="550" y2="585" stroke="#9B2335" stroke-width="2" marker-end="url(#arrow-red)"/>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- EVALUATOR -->
+  <!-- ════════════════════════════════════════════ -->
+  <g filter="url(#shadow-lg)">
+    <rect x="280" y="590" width="540" height="80" rx="10" fill="#FDF2F3" stroke="#E8B4B8" stroke-width="1.5"/>
+    <rect x="280" y="590" width="5" height="80" rx="2.5" fill="#9B2335"/>
+    <!-- Badge -->
+    <rect x="300" y="600" width="18" height="18" rx="9" fill="#9B2335"/>
+    <text x="309" y="613" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">5</text>
+    <text x="326" y="613" font-size="13" fill="#9B2335" font-weight="700">Evaluator</text>
+    <text x="455" y="613" font-size="9" fill="#8a8a9a" font-style="italic">evaluator.py · prompts/evaluator.txt · Neutral synthesis</text>
+    <!-- Details -->
+    <text x="310" y="635" font-size="10" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#9B2335">IN </tspan>Three strategy outputs + market summary (incl. ATR, σ)
+      <tspan dx="12" font-weight="700" fill="#9B2335">OUT </tspan>agents_agree, agents_all_agree, analysis
+    </text>
+    <text x="310" y="652" font-size="10" fill="#3a3a4a">
+      <tspan font-weight="700" fill="#9B2335">RULE </tspan>Never pick a winner · Never recommend · Explain <tspan font-style="italic">why</tspan> strategies diverge, not <tspan font-style="italic">that</tspan> they diverge
+    </text>
+  </g>
+
+  <!-- Conditional branch -->
+  <line x1="550" y1="670" x2="550" y2="695" stroke="#5E35B1" stroke-width="2"/>
+  <!-- Conditional diamond -->
+  <polygon points="550,695 565,710 550,725 535,710" fill="#5E35B1" opacity="0.9"/>
+  <text x="550" y="714" font-size="6.5" fill="#fff" text-anchor="middle" font-weight="700">?</text>
+
+  <!-- Agree branch (left) -->
+  <path d="M 535,710 L 370,710 L 370,738" fill="none" stroke="#5E35B1" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <text x="440" y="703" font-size="8.5" fill="#5E35B1" font-weight="600">agree</text>
+
+  <!-- Disagree branch (right) -->
+  <path d="M 565,710 L 730,710 L 730,738" fill="none" stroke="#5E35B1" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <text x="650" y="703" font-size="8.5" fill="#5E35B1" font-weight="600">disagree</text>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- OUTPUT: JSON Files -->
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Consensus box -->
+  <g filter="url(#shadow)">
+    <rect x="280" y="742" width="180" height="36" rx="6" fill="#F3EEFC" stroke="#C5B3E6" stroke-width="1.5"/>
+    <text x="370" y="759" font-size="10" fill="#5E35B1" text-anchor="middle" font-weight="600">Consensus Summary</text>
+    <text x="370" y="772" font-size="8.5" fill="#8a8a9a" text-anchor="middle">agents_agree: true</text>
+  </g>
+
+  <!-- Disagreement box -->
+  <g filter="url(#shadow)">
+    <rect x="640" y="742" width="180" height="36" rx="6" fill="#F3EEFC" stroke="#C5B3E6" stroke-width="1.5"/>
+    <text x="730" y="759" font-size="10" fill="#5E35B1" text-anchor="middle" font-weight="600">Disagreement Analysis</text>
+    <text x="730" y="772" font-size="8.5" fill="#8a8a9a" text-anchor="middle">agents_agree: false</text>
+  </g>
+
+  <!-- Both converge to output -->
+  <path d="M 370,778 L 370,795 L 540,795" fill="none" stroke="#5E35B1" stroke-width="1.5"/>
+  <path d="M 730,778 L 730,795 L 560,795" fill="none" stroke="#5E35B1" stroke-width="1.5"/>
+
+  <!-- Final output box -->
+  <g filter="url(#shadow)">
+    <rect x="460" y="786" width="180" height="24" rx="5" fill="#5E35B1"/>
+    <text x="550" y="802" font-size="10" fill="#fff" text-anchor="middle" font-weight="700">outputs/{TICKER}.json + summary.json</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- LEGEND -->
+  <!-- ════════════════════════════════════════════ -->
+  <g transform="translate(60, 540)">
+    <rect x="0" y="0" width="130" height="110" rx="6" fill="#fff" stroke="#ddd" stroke-width="1" opacity="0.9" filter="url(#shadow)"/>
+    <text x="10" y="16" font-size="8" fill="#666" font-weight="700" letter-spacing="1">LEGEND</text>
+    <line x1="10" y1="22" x2="120" y2="22" stroke="#eee" stroke-width="1"/>
+    <rect x="10" y="30" width="10" height="10" rx="2" fill="#2B579A"/>
+    <text x="26" y="39" font-size="8.5" fill="#3a3a4a">Non-LLM component</text>
+    <rect x="10" y="46" width="10" height="10" rx="2" fill="#0D6B5E"/>
+    <text x="26" y="55" font-size="8.5" fill="#3a3a4a">LLM strategy agents</text>
+    <rect x="10" y="62" width="10" height="10" rx="2" fill="#9B2335"/>
+    <text x="26" y="71" font-size="8.5" fill="#3a3a4a">Evaluator agent</text>
+    <rect x="10" y="78" width="10" height="10" rx="2" fill="#5E35B1"/>
+    <text x="26" y="87" font-size="8.5" fill="#3a3a4a">Output &amp; branching</text>
+    <line x1="10" y1="96" x2="20" y2="96" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="26" y="100" font-size="8.5" fill="#3a3a4a">Isolation barrier</text>
+  </g>
+
+  <!-- Footer -->
+  <line x1="55" y1="815" x2="1045" y2="815" stroke="#ddd" stroke-width="1"/>
+
+</svg>

@@ -1,0 +1,50 @@
+{
+  "ticker": "NVDA",
+  "run_date": "2026-04-12",
+  "market_data_summary": {
+    "current_price": 188.63,
+    "price_30d_ago": 184.88,
+    "pct_change_30d": 2.0284,
+    "avg_daily_volume_20d": 169634160,
+    "volatility_30d": 2.242,
+    "volatility_90d": 2.1607,
+    "atr_14": 5.195,
+    "atr_pct_of_price": 2.7541,
+    "moving_avg_20d": 177.4205,
+    "moving_avg_50d": 182.0722,
+    "rsi_14": 68.1725,
+    "52_week_high": 207.0173,
+    "52_week_low": 96.8872,
+    "pct_from_52w_high": -8.882,
+    "pct_from_52w_low": 94.6904,
+    "volume_trend": "decreasing",
+    "pct_change_90d": 6.5823,
+    "max_drawdown_90d": -15.5354,
+    "recent_drawdown_5d": 6.3363,
+    "max_single_day_drop_90d": -5.4561
+  },
+  "strategy_a": {
+    "name": "Momentum Trader",
+    "decision": "BUY",
+    "confidence": 7,
+    "justification": "NVDA is trading at $188.63, sitting 6.318% above its 20-day MA and 3.6% above its 50-day MA — a clear bullish price structure that confirms the uptrend is intact. The RSI of 68.17 is right in the sweet spot: strong momentum without being overbought, and the 90-day price change of 6.58% shows sustained trend strength. The recent 5-day surge of 6.34% with 17 positive days out of the last 30 further confirms buyers are in control. The one caveat is decreasing volume, which slightly undermines conviction, but the price action and momentum indicators are too strong to sit on the sidelines."
+  },
+  "strategy_b": {
+    "name": "Value Contrarian",
+    "decision": "HOLD",
+    "confidence": 6,
+    "justification": "NVDA is only 8.88% below its 52-week high, which is far from the 20-30% drawdown threshold that would signal a genuine fear-driven buying opportunity. The RSI of 68.17 is approaching overbought territory, and the recent 5-day surge of 6.34% suggests momentum-driven buying rather than the capitulation I look for as a contrarian entry. The stock is also sitting 94.69% above its 52-week low, meaning there's no meaningful fear in the market — quite the opposite. While the 90-day max drawdown of -15.54% shows some volatility, the current price action reflects greed creeping in, not the panic that creates my best opportunities. I'll wait patiently for a more attractive entry rather than chase this move."
+  },
+  "strategy_c": {
+    "name": "Volatility Averse",
+    "decision": "SELL",
+    "confidence": 7,
+    "justification": "NVDA's 30-day volatility of 2.242% and 90-day volatility of 2.1607% both sit at elevated levels that exceed my comfort threshold for orderly, controlled trading. The ATR as a percentage of price at 2.7541% means daily swings are averaging nearly 3% of the stock's value — far too wide for a volatility-averse posture. The worst single-day drop over the last 90 days was -5.4561%, and the max drawdown reached -15.5354%, confirming that the path has been genuinely turbulent rather than smooth. While the recent 5-day price surge of 6.3363% may look attractive to trend followers, that kind of sharp move in either direction is precisely the whipsaw behavior I seek to avoid. The overall volatility profile signals a dangerous ride, and I prefer to reduce exposure until the tape calms down."
+  },
+  "evaluator": {
+    "agents_agree": false,
+    "agents_all_agree": false,
+    "analysis": "Momentum and Contrarian disagree here, with Volatility Averse taking the most bearish stance of all three. The Momentum Trader anchors its BUY on NVDA's price structure — trading 6.318% above the 20-day MA and 3.6% above the 50-day MA — combined with an RSI of 68.17 that it reads as 'sweet spot' momentum rather than overbought excess, and a 90-day gain of 6.58% confirming trend persistence. The Value Contrarian reads the same RSI of 68.17 as a warning sign of greed rather than opportunity, and notes that at only 8.88% below its 52-week high and 94.69% above its 52-week low, there is no fear-driven capitulation to exploit — the conditions that define its ideal entry simply aren't present, warranting a HOLD. The Volatility Averse strategy diverges most sharply by focusing entirely on path risk: a 30-day volatility of 2.242%, an ATR of 2.7541% of price, a worst single-day drop of -5.4561%, and a 90-day max drawdown of -15.54% collectively paint a picture of turbulent, whipsaw-prone price action that is incompatible with its risk tolerance. Notably, the same 5-day surge of 6.34% that Momentum reads as bullish confirmation, Volatility Averse reads as evidence of dangerous directional extremes in either direction. The Contrarian and Volatility Averse strategies share a skepticism about chasing the current move, but for entirely different reasons — one is waiting for fear, the other is avoiding turbulence altogether. All three strategies are responding to the same data but weighting trend structure, sentiment positioning, and path smoothness in fundamentally different proportions."
+  },
+  "three_way_pattern": "all_three_distinct"
+}
