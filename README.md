@@ -12,7 +12,7 @@ This project makes disagreement a first-class, auditable output by separating th
 - **Attribution by construction.** Each agent carries an explicit, *ranked* data-priority hierarchy and an explicit **ignore list** in its system prompt (`prompts/strategy_*.txt`). The Momentum Trader weights moving averages and trend and is told to ignore 52-week distance and drawdowns; the Value Contrarian weights distance-from-highs, RSI, and drawdowns and is told to ignore moving-average crossovers. They are, by design, reading different columns of the same table — so any disagreement is attributable to *which* numbers each one was instructed to trust.
 - **Code-enforced agreement, LLM-authored explanation.** Whether two decisions match is a Python equality check (`agents_agree`, `agents_all_agree`), recorded independently of any model prose. The Evaluator is constrained to synthesize — explain the divergence, never recommend a winner (`prompts/evaluator.txt`).
 
-The payoff is a structured record where the *fact* of agreement (deterministic) and the *reasoning* about it (generated) are never conflated — and where the sharpest disagreement can be traced to a single indicator.
+The payoff is a structured record where the *fact* of agreement (deterministic) and the *reasoning* about it (generated) are never conflated — and where each disagreement can be traced to the specific rules each agent was given.
 
 ## Architecture
 
@@ -65,13 +65,13 @@ From the committed run (2026-04-12), across the six tickers: Momentum vs. Contra
 | Ticker | Momentum | Contrarian | Vol. Averse | Pattern |
 |--------|----------|------------|-------------|---------|
 | NVDA | BUY | HOLD | SELL | all three distinct |
-| TSLA | SELL | BUY | SELL | two-one (the only opposite-action pair) |
+| TSLA | SELL | BUY | SELL | two-one (the only BUY vs SELL split between Momentum and Contrarian) |
 | JNJ | HOLD | HOLD | BUY | two-one |
 | INTC | HOLD | SELL | SELL | two-one |
 | GME | HOLD | HOLD | HOLD | unanimous |
 | JPM | HOLD | SELL | HOLD | two-one |
 
-The finding worth surfacing: **RSI is the mechanical fulcrum of nearly every Momentum-vs-Contrarian split.** The same reading is read through opposite lenses — on INTC an RSI of 80.35 is "overbought exhaustion" to the Momentum agent and "peak euphoria to sell" to the Contrarian; on TSLA an RSI of ~42 is "sustained selling pressure" versus "approaching an oversold opportunity." Disagreement isn't random; it traces to one indicator both agents hold but interpret inversely — exactly the attribution the architecture was built to expose. Full justifications and the Evaluator's per-ticker analysis are in `outputs/`, with the extended write-up in `report/report.pdf`.
+The finding worth surfacing: **the agents mostly agreed on what the numbers said; they disagreed on what to do about them.** On INTC (RSI 80.35) both called the stock overbought: the Momentum agent saw "overbought exhaustion, well above my 75 threshold" and held, while the Contrarian saw RSI "deeply overbought, well above my 70 threshold" and sold. JPM (RSI 73.69) split the same way, because 73.69 falls between those two thresholds. On TSLA the split came from a different input: the Contrarian bought because the stock was 28.77% below its 52-week high. NVDA is the one case where the same reading was interpreted differently: RSI 68.17 was "right in the sweet spot" for Momentum and "approaching overbought territory" for the Contrarian. The disagreement traces to the thresholds and priorities written into each agent's prompt, exactly the attribution the architecture was built to expose. Full justifications and the Evaluator's per-ticker analysis are in `outputs/`, with the extended write-up in `report/report.pdf`.
 
 ## Key design decisions
 
@@ -84,7 +84,7 @@ The finding worth surfacing: **RSI is the mechanical fulcrum of nearly every Mom
 ## Limitations
 
 - **The Momentum agent's RSI ceiling can override its own strongest signal.** On INTC — a 52-week high, price ~29.5% above its 20-day MA, 20 of 30 positive days, rising volume, +53.8% over 90 days — it still issued HOLD, because RSI at 80.35 sat above the prompt's overbought band. The safety rail is behaving as written, but it makes a momentum agent unable to act on exactly the parabolic move its philosophy should chase. Treating that band as a confidence discount rather than a hard gate is the documented fix.
-- **The evaluator occasionally breaks neutrality.** On a couple of tickers it described the Contrarian as "more internally consistent" — normative language its role forbids. Recorded as a limitation rather than edited out of the outputs.
+- **The evaluator can drift from neutral, or past the data.** On INTC and JPM, an earlier version of the evaluator called the Contrarian "more internally consistent." I added an explicit ban to its prompt (`prompts/evaluator.txt`). The committed run still has one slip: on INTC it says "both MAs rising," but the agents are never given moving-average slope.
 - **Minor persona leakage.** On JPM the Contrarian referenced distance from the 20-day MA, an indicator its ignore list tells it to discount — a prompt-compliance slip, not a crash.
 - **Agreement is measured on the discrete decision only** (BUY/HOLD/SELL), not on confidence or reasoning quality; two agents can "agree" for unrelated reasons.
 - **This is an analysis harness, not investment advice.** Outputs are LLM-generated over a single snapshot; model non-determinism and the chosen date both shape the results.
