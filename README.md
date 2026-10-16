@@ -26,7 +26,7 @@ A parallel fan-out pipeline: deterministic data in, three isolated agents, a neu
 
 - **Phase 1 — Data (no LLM).** `src/market_data.py` pulls ~1 year of OHLCV from yfinance and computes every indicator in Python: 20/50-day moving averages, 14-day RSI (simple-average version, so values can differ slightly from charting sites), 30-day and 90-day volatility (std of daily returns), 14-day ATR and ATR as a percent of price, worst single-day drop over 90 days, max drawdown, 52-week positioning, and volume trend. Zero model calls: every number the agents see is computed, not generated.
 - **Phase 2 — Analysis (parallel, isolated).** The three strategy agents receive the same dict and run concurrently via `asyncio.gather`. Momentum and Contrarian see the same figures; the Volatility Averse agent sees a volatility-focused set that adds 90-day volatility and ATR. All use Claude Sonnet (`claude-sonnet-4-6`) at temperature 0.3. No agent sees another's output.
-- **Phase 3 — Evaluation.** Agreement is computed programmatically; the Evaluator produces a three-way synthesis of the divergence.
+- **Phase 3 — Evaluation.** Agreement is computed programmatically; the Evaluator then explains the pattern: why all three agreed, which two aligned and why, or what anchored each of three different calls.
 - **Phase 4 — Output.** One JSON per ticker plus `summary.json`, each tagged with a `three_way_pattern` of `unanimous`, `two_one`, or `all_three_distinct`.
 
 Robustness lives in `src/llm_client.py`: a three-layer JSON extractor (direct parse → fenced-block → brace matching), a retry loop (up to 3 attempts), and typed fallback dicts so a single malformed response degrades one cell rather than crashing the run. (A yfinance data failure still stops the run.)
