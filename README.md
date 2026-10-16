@@ -4,15 +4,15 @@ Three isolated LLM strategy agents — a **Momentum Trader**, a **Value Contrari
 
 ## The question
 
-Ensembles of AI advisors are increasingly pointed at judgment calls — should we buy, hold, hedge, escalate — where the tempting design is to average the models into one confident answer. That instinct destroys the most useful thing an ensemble produces: *legible disagreement*. The interesting question is not "can agents analyze a stock?" but **"when several agents look at the same data and disagree, is the disagreement meaningful signal you can trace back to specific inputs — or just noise dressed up as consensus?"**
+Ensembles of AI advisors are increasingly pointed at judgment calls — should we buy, hold, hedge, escalate — where the tempting design is to average the models into one confident answer. That instinct destroys the most useful thing an ensemble produces: *legible disagreement*. This project asks: **when several agents look at the same data and disagree, can the disagreement be traced back to specific inputs, or is it just noise?**
 
-This project makes disagreement a first-class, auditable output by separating three things:
+This project makes disagreement an auditable output by separating three things:
 
 - **Isolation.** The three strategy agents run in parallel on one shared market-data dict and never see each other's output (`asyncio.gather` in `src/orchestration.py`). So when they disagree, it is genuine divergence, not one agent anchoring on another.
 - **Attribution by construction.** Each agent carries an explicit, *ranked* data-priority hierarchy and an explicit **ignore list** in its system prompt (`prompts/strategy_*.txt`). The Momentum Trader weights moving averages and trend and is told to ignore 52-week distance and drawdowns; the Value Contrarian weights distance-from-highs, RSI, and drawdowns and is told to ignore moving-average crossovers. They are, by design, reading different columns of the same table — so any disagreement is attributable to *which* numbers each one was instructed to trust.
 - **Code-enforced agreement, LLM-authored explanation.** Whether two decisions match is a Python equality check (`agents_agree`, `agents_all_agree`), recorded independently of any model prose. The Evaluator is constrained to synthesize — explain the divergence, never recommend a winner (`prompts/evaluator.txt`).
 
-The payoff is a structured record where the *fact* of agreement (deterministic) and the *reasoning* about it (generated) are never conflated — and where each disagreement can be traced to the specific rules each agent was given.
+The result is a structured record that keeps the *fact* of agreement (deterministic) separate from the *reasoning* about it (generated), and traces each disagreement to the specific rules each agent was given.
 
 ## Architecture
 
