@@ -1,6 +1,10 @@
 # StockTrader — Multi-Agent Signal Disagreement
 
-Three isolated LLM strategy agents — a **Momentum Trader**, a **Value Contrarian**, and a **Volatility Averse** analyst — read the *identical* market-data snapshot for a stock and each return an independent **BUY / HOLD / SELL** call with a confidence score and a numbers-backed justification. A fourth **Evaluator** agent then explains *why* they diverged, without ever picking a winner. Agreement itself is computed in plain Python, not asked of a model. Built on the Anthropic API with `asyncio` fan-out and no agent framework.
+Three isolated LLM strategy agents — a **Momentum Trader**, a **Value Contrarian**, and a **Volatility Averse** analyst — analyze the same market-data snapshot for a stock and each return an independent **BUY / HOLD / SELL** call with a confidence score and a numbers-backed justification. A fourth **Evaluator** agent then explains *why* they diverged, without ever picking a winner. Agreement itself is computed in plain Python, not asked of a model. Built on the Anthropic API with `asyncio` fan-out and no agent framework.
+
+*Built solo for CMU Heinz College's Agentic Technologies (April 2026), with AI coding assistance.*
+
+**Result:** in a six-stock run (April 12, 2026), all three agents agreed on only one stock. They mostly read the numbers the same way and split on what to do about them, because each prompt sets different cut-offs (for example, Momentum avoids buying above RSI 75; the Contrarian sells above 70).
 
 ## The question
 
@@ -20,12 +24,12 @@ A parallel fan-out pipeline: deterministic data in, three isolated agents, a neu
 
 ![StockTrader system architecture — parallel fan-out with a convergence barrier: a non-LLM market-data component feeds one shared dict to three isolated strategy agents, whose outputs meet at a programmatic agreement check and a neutral evaluator before being written to per-ticker JSON plus a summary.](report/System%20Diagram/stocktrader_architecture.png)
 
-- **Phase 1 — Data (no LLM).** `src/market_data.py` pulls ~1 year of OHLCV from yfinance and computes every indicator in Python: 20/50-day moving averages, 14-day RSI (simple-average version, so values can differ slightly from charting sites), 30-day and 90-day volatility (std of daily returns), 14-day ATR and ATR as a percent of price, worst single-day drop over 90 days, max drawdown, 52-week positioning, and volume trend. Zero model calls, so every number the agents reason over is reproducible.
-- **Phase 2 — Analysis (parallel, isolated).** The three strategy agents receive the same dict and run concurrently via `asyncio.gather`. All use Claude Sonnet (`claude-sonnet-4-6`) at temperature 0.3. No agent sees another's output.
+- **Phase 1 — Data (no LLM).** `src/market_data.py` pulls ~1 year of OHLCV from yfinance and computes every indicator in Python: 20/50-day moving averages, 14-day RSI (simple-average version, so values can differ slightly from charting sites), 30-day and 90-day volatility (std of daily returns), 14-day ATR and ATR as a percent of price, worst single-day drop over 90 days, max drawdown, 52-week positioning, and volume trend. Zero model calls: every number the agents see is computed, not generated.
+- **Phase 2 — Analysis (parallel, isolated).** The three strategy agents receive the same dict and run concurrently via `asyncio.gather`. Momentum and Contrarian see the same figures; the Volatility Averse agent sees a volatility-focused set that adds 90-day volatility and ATR. All use Claude Sonnet (`claude-sonnet-4-6`) at temperature 0.3. No agent sees another's output.
 - **Phase 3 — Evaluation.** Agreement is computed programmatically; the Evaluator produces a three-way synthesis of the divergence.
 - **Phase 4 — Output.** One JSON per ticker plus `summary.json`, each tagged with a `three_way_pattern` of `unanimous`, `two_one`, or `all_three_distinct`.
 
-Robustness lives in `src/llm_client.py`: a three-layer JSON extractor (direct parse → fenced-block → brace matching), a retry loop (up to 3 attempts), and typed fallback dicts so a single malformed response degrades one cell rather than crashing the run.
+Robustness lives in `src/llm_client.py`: a three-layer JSON extractor (direct parse → fenced-block → brace matching), a retry loop (up to 3 attempts), and typed fallback dicts so a single malformed response degrades one cell rather than crashing the run. (A yfinance data failure still stops the run.)
 
 ## The three lenses
 
@@ -35,7 +39,7 @@ Each agent is a behavioral design, not a forecaster — the same data, deliberat
 |-------|-------------|--------------|--------------------|
 | **Momentum Trader** | "The trend is your friend." | Price vs. 20/50-day MAs, trend strength, volume confirmation, RSI as a momentum gauge | Distance from 52-week high, drawdowns, volatility |
 | **Value Contrarian** | "Markets overreact — buy fear, sell greed." | Distance from 52-week extremes, RSI as overbought/oversold, drawdown magnitude | Moving-average crossovers, volume trend, win/loss-day ratio |
-| **Volatility Averse** | "Survive first — prefer calm tape." | 30/90-day volatility, ATR as % of price, worst single-day drop, max drawdown | Trend-vs-contrarian framing as a primary driver |
+| **Volatility Averse** | "Survive first, profit second." | 30/90-day volatility, ATR as % of price, worst single-day drop, max drawdown | Moving averages, 52-week distance, RSI on its own |
 
 ## Quickstart
 
@@ -77,10 +81,7 @@ The finding worth surfacing: **the agents mostly agreed on what the numbers said
 
 ## Key design decisions
 
-- **Agreement is a code check, not a model opinion.** `A == B` is Python; the Evaluator never gets to decide whether the agents agreed, only to explain why they didn't.
-- **The evaluator is barred from picking a winner.** Its prompt constrains it to neutral synthesis, so the system surfaces the trade-off rather than laundering one lens into a recommendation.
-- **Divergence is engineered, then made legible.** Ranked priority hierarchies plus explicit ignore lists mean each agent's behavior maps to named inputs — the disagreement is attributable by construction, not rationalized after the fact.
-- **Determinism where it belongs.** All indicators are computed in Python from raw OHLCV; the model reasons over fixed numbers, so a result is reproducible and every cited figure is checkable.
+- **Indicators in code, judgment in the model.** All indicators are computed in Python from raw OHLCV, and 20 of them are saved with each result (`market_data_summary`), so most figures an agent cites can be checked.
 - **Plain orchestration.** `asyncio` fan-out, no LangChain / CrewAI / LangGraph — the control flow is readable end to end.
 
 ## Limitations
@@ -105,6 +106,4 @@ The finding worth surfacing: **the agents mostly agreed on what the numbers said
 | `Agent and Multi-Agent System Canvases/` | Specification, architecture, and per-agent design canvases (HTML) |
 | `report/` | Comparative analysis write-up (`report.pdf`) and the architecture diagram |
 
-## Author
-
-Asli Gulcur.
+Author: [Asli Gulcur](https://asligulcur.github.io/).
