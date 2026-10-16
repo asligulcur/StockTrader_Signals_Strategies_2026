@@ -42,7 +42,7 @@ Each agent is a behavioral design, not a forecaster — the same data, deliberat
 Requires Python 3.10+ and an Anthropic API key.
 
 ```bash
-git clone <repo-url> && cd stocktrader
+git clone https://github.com/asligulcur/StockTrader_Signals_Strategies_2026.git && cd StockTrader_Signals_Strategies_2026
 python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
